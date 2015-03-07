@@ -1,12 +1,15 @@
 package com.lemonslice.appathon;
 
 import android.content.Intent;
+import android.hardware.Camera;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputConnection;
+import android.widget.FrameLayout;
 
 /**
  * Created by Sam on 07/03/2015.
@@ -16,6 +19,10 @@ public class Seemoji extends InputMethodService
 
     private KeyboardView kv;
     private Keyboard keyboard;
+    private FrameLayout containerView;
+    private CameraPreview cameraPreview;
+
+    private boolean isCameraMode = false;
 
     private boolean caps = false;
 
@@ -34,10 +41,17 @@ public class Seemoji extends InputMethodService
                 ic.deleteSurroundingText(delcount, 0);
                 break;
             case Keyboard.KEYCODE_SHIFT:
-                //Use this for activating camera
-                caps = !caps;
+                containerView.removeAllViews();
+                if (isCameraMode) {
+                    containerView.addView(kv);
+                } else {
+                    containerView.addView(cameraPreview);
+                }
+                isCameraMode = !isCameraMode;
+
+                /*caps = !caps;
                 keyboard.setShifted(caps);
-                kv.invalidateAllKeys();
+                kv.invalidateAllKeys();*/
                 break;
             case Keyboard.KEYCODE_DONE:
                 ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
@@ -115,10 +129,38 @@ public class Seemoji extends InputMethodService
     }
     @Override
     public View onCreateInputView() {
-        kv = (KeyboardView)getLayoutInflater().inflate(R.layout.keyboard, null);
+        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+        containerView = new FrameLayout(this);
+        containerView.setLayoutParams(lp);
+
+        cameraPreview = new CameraPreview(this, openFrontCamera());
+
+        kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard, null);
         keyboard = new Keyboard(this, R.xml.qwerty);
         kv.setKeyboard(keyboard);
         kv.setOnKeyboardActionListener(this);
-        return kv;
+
+        containerView.addView(kv);
+
+        return containerView;
     }
+
+    private Camera openFrontCamera() {
+        Camera c = null;
+        Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
+        for (int i = 0; i < Camera.getNumberOfCameras(); i++) {
+            Camera.getCameraInfo(i, cameraInfo);
+            if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+                try {
+                    c = Camera.open(i);
+                    c.setDisplayOrientation(90);
+                } catch (RuntimeException e) {
+                    Log.e("EMOJI", "Front camera did not open");
+                }
+                break;
+            }
+        }
+        return c;
+    }
+
 }
