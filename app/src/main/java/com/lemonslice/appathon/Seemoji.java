@@ -1,5 +1,6 @@
 package com.lemonslice.appathon;
 
+import android.content.Intent;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
