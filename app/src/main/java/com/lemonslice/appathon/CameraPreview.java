@@ -13,14 +13,16 @@ import java.util.List;
  * Created by alexander on 3/7/15.
  */
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
-    private Camera camera;
+    public Camera camera;
     private SurfaceHolder viewHolder;
+    private MyFaceDetectionListener myFaceDetectionListener;
 
     public CameraPreview(Context context, Camera camera) {
         super(context);
         this.camera = camera;
         viewHolder = getHolder();
         viewHolder.addCallback(this);
+        myFaceDetectionListener = new MyFaceDetectionListener();
     }
 
     @Override
@@ -31,10 +33,12 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             Log.d("EMOJI", "surfaceview " + getWidth() + " " + getHeight());
             Camera.Size optimalPreviewSize = getOptimalPreviewSize(getWidth(), getHeight());
             Log.d("EMOJI", "optimalsize " + optimalPreviewSize.width + " " + optimalPreviewSize.height);
+            Log.d("EMOJI", "Max detectable faces:" + parameters.getMaxNumDetectedFaces());
             parameters.setPreviewSize(optimalPreviewSize.width, optimalPreviewSize.height);
-            camera.setParameters(parameters);
+//            camera.setParameters(parameters); // turning this on
+            camera.setFaceDetectionListener(myFaceDetectionListener);
             camera.startPreview();
-//            camera.startFaceDetection();
+            camera.startFaceDetection();
         } catch (IOException e) {
             Log.d("EMOJI", "ERROR SETTING CAMERA PREVIEW " + e.getMessage());
         }
@@ -47,22 +51,30 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         try {
             camera.stopPreview();
         } catch (Exception ignored) {}
-
-        try {
-            camera.setPreviewDisplay(holder);
-            camera.startPreview();
-        } catch (IOException e) {
-            Log.d("EMOJI", "ERROR CHANGING CAMERA PREVIEW: " + e.getMessage());
-        }
+        surfaceCreated(holder);
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        // meh
+        assert(camera != null);
+
+        camera.stopPreview();
+        camera.release();
+        camera = null;
+
     }
 
+    // stolen from the internet because I am cool
     private Camera.Size getOptimalPreviewSize(int w, int h) {
         List<Camera.Size> sizes = camera.getParameters().getSupportedPictureSizes();
+        StringBuilder sizeStr = new StringBuilder();
+        sizeStr.append("SIZES: [");
+        for (Camera.Size size : sizes) {
+            sizeStr.append(String.format("(%d,%d),", size.width, size.height));
+        }
+        sizeStr.append("]");
+        Log.d("EMOJI", sizeStr.toString());
+
 
         final double ASPECT_TOLERANCE = 0.1;
         double targetRatio=(double)h / w;
@@ -91,5 +103,20 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             }
         }
         return optimalSize;
+    }
+
+    public class MyFaceDetectionListener implements Camera.FaceDetectionListener {
+
+        @Override
+        public void onFaceDetection(Camera.Face[] faces, Camera camera) {
+            Log.d("EMOJI", "onFaceDetection");
+            if (faces.length > 0) {
+                Log.d("EMOJI", "" + faces.length + "Faces detected");
+                for (Camera.Face face : faces) {
+                    Log.d("EMOJI", "FACE FOUND AT:");
+                    Log.d("EMOJI", String.format("l %d r %d top %d bottom %d", face.rect.left, face.rect.right, face.rect.top, face.rect.bottom));
+                }
+            }
+        }
     }
 }
