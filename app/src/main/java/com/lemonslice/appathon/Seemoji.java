@@ -208,7 +208,7 @@ public class Seemoji extends InputMethodService
                         public void onClick(View v) {
                             InputConnection ic = getCurrentInputConnection();
                             String codex;
-                            codex = "\uD83D\uDE03";
+                            codex = stringToEmoji(cameraPreview.getCurrEmoji());
                             ic.commitText(codex,1);
                         }
                     });
@@ -224,16 +224,6 @@ public class Seemoji extends InputMethodService
         return containerView;
     }
 
-    public void switchKeyboardMode() {
-        containerView.removeAllViews();
-        if (isCameraMode) {
-            containerView.addView(kv);
-        } else {
-            containerView.addView(cameraLayout);
-        }
-        isCameraMode = !isCameraMode;
-
-    }
 
     private Camera openFrontCamera() {
         Camera c = null;
@@ -253,4 +243,33 @@ public class Seemoji extends InputMethodService
         return c;
     }
 
+    public String stringToEmoji(String inp) {
+        String codex = "";
+        switch(inp) {
+            case "E_SMILE" :
+                codex = "\uD83D\uDE03";
+                break;
+            case "E_SUPER_SMILE" :
+                codex = "\uD83D\uDE04";
+                break;
+            case "E_WINK" :
+                codex = "\uD83D\uDE09";
+                break;
+            case "E_TONGUE" :
+                codex = "\uD83D\uDE1B";
+                break;
+            case "E_SUPER_WINK" :
+                codex = "\uD83D\uDE06";
+                break;
+            case "E_TONGUE_WINK" :
+                codex = "\uD83D\uDE1C";
+                break;
+            case "E_SUNGLASSES" :
+                codex = "\uD83D\uDE0E";
+                break;
+            default:
+                break;
+        }
+        return codex;
+    }
 }

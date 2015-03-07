@@ -18,7 +18,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     public Camera camera;
     private SurfaceHolder viewHolder;
     private MyFaceDetectionListener myFaceDetectionListener;
-
+    public String currEmoji = "";
     Camera.Parameters cameraParameters;
 
     public CameraPreview(Context context, Camera camera) {
@@ -124,7 +124,10 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             YuvImage img = new YuvImage(data, ImageFormat.NV21, previewSize.width, previewSize.height, null);
             byte[] yuvData = img.getYuvData();
 
-            EmojiDetector.get_emoji_from_image(img, previewSize.width, previewSize.height);
+            EmojiDetector.emoji xxx = EmojiDetector.get_emoji_from_image(img, previewSize.width, previewSize.height);
+            Log.d("Sam", xxx.toString());
+
+            setCurrEmoji(xxx.toString());
 //            YuvImage img = new YuvImage(data, ImageFormat.NV21, previewSize.width, previewSize.height, null);
 //            byte[] yuvData = img.getYuvData();
         }
@@ -142,6 +145,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                 for (Camera.Face face : faces) {
 
                     Log.d("EMOJI", "FACE FOUND AT:");
+                    currEmoji = "\uD83D\uDE03";
                     Log.d("EMOJI", String.format("l %d r %d top %d bottom %d", face.rect.left, face.rect.right, face.rect.top, face.rect.bottom));
                 }
             }
@@ -156,8 +160,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
                 try {
                     c = Camera.open(i);
-                    c.getCameraInfo(i,cameraInfo);
-                    c.setDisplayOrientation(cameraInfo.orientation);
+                    c.setDisplayOrientation(270);
                 } catch (RuntimeException e) {
                     Log.e("EMOJI", "Front camera did not open");
                 }
@@ -165,5 +168,13 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             }
         }
         return c;
+    }
+
+    public String getCurrEmoji() {
+        return currEmoji;
+    }
+
+    public void setCurrEmoji(String newEmoji) {
+        currEmoji = newEmoji;
     }
 }
