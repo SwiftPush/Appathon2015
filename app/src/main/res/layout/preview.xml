@@ -2,9 +2,12 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:background="#D1D6D9"
+    android:gravity="center_horizontal|top"
     android:textStyle="bold"
     android:textSize="30sp"
-    >
+    android:layout_alignParentTop="true"
+    android:layout_alignParentStart="true"
+    android:background="@drawable/key_preview_bg"
+    android:paddingBottom="30dp"
+    android:paddingTop="10dp">
 </TextView>
