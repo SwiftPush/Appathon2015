@@ -36,6 +36,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             camera.setPreviewDisplay(holder);
             cameraParameters = camera.getParameters();
 
+            Log.d("EMOJI", "CP HEIGHT: " + getHeight());
+
 //            Camera.Size optimalPreviewSize = getOptimalPreviewSize(getWidth(), getHeight());
 //            cameraParameters.setPreviewSize(optimalPreviewSize.width, optimalPreviewSize.height);
 //            camera.setParameters(cameraParameters); // turning this on breaks face detection

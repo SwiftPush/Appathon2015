@@ -12,6 +12,7 @@ public class MainActivity extends Activity {
 
     private Camera camera = null;
     private CameraPreview cameraPreview;
+    private FrameLayout cameraLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,22 +20,35 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         camera = openFrontCamera();
-//        ViewGroup.LayoutParams clp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 500);
         cameraPreview = new CameraPreview(this, camera);
-//        cameraPreview.setLayoutParams(clp);
 
-        Camera.Size size = camera.getParameters().getPreviewSize();
-        float density = Resources.getSystem().getDisplayMetrics().density;
-        float aspectRatio = (float)size.width/(float)size.height;
-        int dp_height = (int) (size.height / density);
-        int dp_width = (int) (size.width / density);
-        Log.d("EMOJI", String.format("dp (%d,%d)", dp_width, dp_height));
+        // view tree observer lets me set the size of the camera preview view at runtime
+        ViewTreeObserver viewTreeObserver = cameraPreview.getViewTreeObserver();
+        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            boolean changedLayout = false;
+            @Override
+            public void onGlobalLayout() {
+                if (cameraLayout != null && !changedLayout) {
+                    changedLayout = true;
+                    Camera.Size size = camera.getParameters().getPreviewSize();
+                    float density = Resources.getSystem().getDisplayMetrics().density;
+                    float dpHeight = size.height / density;
+                    float dpWidth = size.width / density;
+                    Log.d("EMOJI", String.format("dp (%f,%f)", dpWidth, dpHeight));
 
-        FrameLayout.LayoutParams flp = new FrameLayout.LayoutParams(dp_height, dp_width);
-        FrameLayout cameraLayout = (FrameLayout) findViewById(R.id.camera_layout);
-        cameraLayout.setLayoutParams(flp);
+                    // n.b it may seem like I'm using the wrong values, this is because the camera view has been rotated
+                    float previewWidth = cameraPreview.getWidth();
+                    float scale = previewWidth / dpHeight;
+                    Log.d("EMOJI", String.format("ph: %s scale: %s", previewWidth, Float.toString(scale)));
+
+                    FrameLayout.LayoutParams flp = new FrameLayout.LayoutParams((int)previewWidth, (int)(dpWidth*scale));
+                    cameraLayout.setLayoutParams(flp);
+                }
+            }
+        });
+
+        cameraLayout = (FrameLayout) findViewById(R.id.camera_layout);
         cameraLayout.addView(cameraPreview);
-
     }
 
     private Camera openFrontCamera() {
