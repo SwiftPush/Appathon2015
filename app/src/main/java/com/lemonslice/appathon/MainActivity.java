@@ -21,7 +21,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        camera = cameraPreview.openFrontCamera();
+        camera = CameraPreview.openFrontCamera();
         cameraPreview = new CameraPreview(this, camera);
 
         cameraLayout = (ScrollView) findViewById(R.id.camera_layout);
