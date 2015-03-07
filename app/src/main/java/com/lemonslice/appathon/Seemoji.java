@@ -28,7 +28,8 @@ public class Seemoji extends InputMethodService
                 int delcount = 1;
                 String tmp = (String)ic.getTextBeforeCursor(2,0);
                 if (tmp.length() >0 ) {
-                    delcount++;
+                    if (tmp.charAt(0) == '\uD83D')
+                        delcount++;
                 }
                 ic.deleteSurroundingText(delcount, 0);
                 break;
