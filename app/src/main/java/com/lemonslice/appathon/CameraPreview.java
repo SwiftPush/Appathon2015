@@ -43,6 +43,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 //            camera.setParameters(cameraParameters); // turning this on breaks face detection
 
             camera.setFaceDetectionListener(myFaceDetectionListener);
+            camera.setPreviewCallback(this);
             camera.startPreview();
             camera.startFaceDetection();
         } catch (IOException e) {
@@ -58,12 +59,14 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             camera.stopPreview();
         } catch (Exception ignored) {}
         surfaceCreated(holder);
+
+        Log.d("Test", "Surface changed");
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         assert(camera != null);
-        camera.setPreviewCallback(null);
+        //camera.setPreviewCallback(null);
         camera.stopPreview();
         camera.release();
         camera = null;
@@ -111,20 +114,19 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         return optimalSize;
     }
 
-    @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
         if (cameraParameters.getPreviewFormat() == ImageFormat.NV21) {
             Camera.Size previewSize = cameraParameters.getPreviewSize();
-<<<<<<< HEAD
+
             YuvImage img = new YuvImage(data, ImageFormat.NV21, previewSize.width, previewSize.height, null);
             byte[] yuvData = img.getYuvData();
 
             EmojiDetector.get_emoji_from_image(img, previewSize.width, previewSize.height);
-=======
 //            YuvImage img = new YuvImage(data, ImageFormat.NV21, previewSize.width, previewSize.height, null);
 //            byte[] yuvData = img.getYuvData();
->>>>>>> 6ec3b75ecb63af4d758c8a27447ab721d0736dc9
         }
+
+        Log.d("Testicles", "on preview frame");
     }
 
     public class MyFaceDetectionListener implements Camera.FaceDetectionListener {
@@ -135,6 +137,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             if (faces.length > 0) {
                 Log.d("EMOJI", "" + faces.length + "Faces detected");
                 for (Camera.Face face : faces) {
+
                     Log.d("EMOJI", "FACE FOUND AT:");
                     Log.d("EMOJI", String.format("l %d r %d top %d bottom %d", face.rect.left, face.rect.right, face.rect.top, face.rect.bottom));
                 }
