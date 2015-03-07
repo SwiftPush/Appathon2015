@@ -3,6 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:fillViewport="true"
+
     android:id="@+id/camera_layout"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <FrameLayout
@@ -17,11 +18,26 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/camera_overlay">
-            <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="This is a text ^__^">
-            </TextView>
             </FrameLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Aa"
+            android:id="@+id/backToKeyboardtxt"
+            android:layout_gravity="right|center_vertical"
+            android:clickable="true"
+            android:textStyle="bold"
+            android:textColor="#ffffffff" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Aa"
+            android:textAllCaps="false"
+            android:id="@+id/backToKeyboardBtn"
+            android:layout_gravity="right|bottom" />
     </FrameLayout>
 </com.lemonslice.appathon.NoScrollView>
