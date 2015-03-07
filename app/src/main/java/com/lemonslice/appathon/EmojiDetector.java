@@ -226,10 +226,12 @@ final public class EmojiDetector {
 
     static rgb yuv_to_rgb(byte[] data, int width, int height, int x, int y)
     {
-        // TODO: Likely bug here
-        if(y*width + x >= data.length)
+        /// pixel values and widths are hardcoded, this is terribad
+        if(y >= height || x >= width)
             return new rgb(0);
 
+        if(y*width + x >= data.length)
+            return new rgb(0);
 
         int Y = data[y*width + x] & 0xff;
 
@@ -240,8 +242,7 @@ final public class EmojiDetector {
         int yby2 = y/2;
 
         // make this V for NV12/420SP
-
-        // TODO: Likely bug here
+        // pixel values hardcoded
         if(width*height + 2*xby2 + 1 + yby2*width >= data.length)
             return new rgb(0);
 
