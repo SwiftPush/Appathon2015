@@ -13,8 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputConnection;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 /**
  * Created by Sam on 07/03/2015.
@@ -183,6 +186,27 @@ public class Seemoji extends InputMethodService
                     cameraPreview.setLayoutParams(flp);
                     cameraLayout.setLayoutParams(slp);
                     cameraLayout.scrollTo(0, cameraLayout.getBottom() / 2);
+                    final TextView button = (TextView) cameraLayout.findViewById(R.id.backToKeyboardtxt);
+                    button.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            containerView.removeAllViews();
+                            if (isCameraMode) {
+                                containerView.addView(kv);
+                            } else {
+                                containerView.addView(cameraLayout);
+                            }
+                            isCameraMode = !isCameraMode;
+                        }
+                    });
+                    final ImageView selectButton = (ImageView) cameraLayout.findViewById(R.id.selectEmoji);
+                    selectButton.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            InputConnection ic = getCurrentInputConnection();
+                            String codex;
+                            codex = "\uD83D\uDE03";
+                            ic.commitText(codex,1);
+                        }
+                    });
                 }
             }
         });
@@ -190,7 +214,20 @@ public class Seemoji extends InputMethodService
 
         containerView.addView(kv);
 
+
+
         return containerView;
+    }
+
+    public void switchKeyboardMode() {
+        containerView.removeAllViews();
+        if (isCameraMode) {
+            containerView.addView(kv);
+        } else {
+            containerView.addView(cameraLayout);
+        }
+        isCameraMode = !isCameraMode;
+
     }
 
     private Camera openFrontCamera() {
