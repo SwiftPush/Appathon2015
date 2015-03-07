@@ -35,6 +35,7 @@ public class Seemoji extends InputMethodService
     private FrameLayout containerView;
     private boolean isCameraMode = false;
     private boolean caps = false;
+    private FrameLayout outerLayout;
 
     @Override
     public void onKey(int primaryCode, int[] keyCodes) {
@@ -55,7 +56,7 @@ public class Seemoji extends InputMethodService
                 if (isCameraMode) {
                     containerView.addView(kv);
                 } else {
-                    containerView.addView(cameraLayout);
+                    containerView.addView(outerLayout);
                 }
                 isCameraMode = !isCameraMode;
 
@@ -153,7 +154,8 @@ public class Seemoji extends InputMethodService
         containerView = new FrameLayout(this);
 
         cameraPreview = new CameraPreview(this, CameraPreview.openFrontCamera());
-        cameraLayout = (NoScrollView) layoutInflater.inflate(R.layout.camera_keyboard, null);
+        outerLayout = (FrameLayout) layoutInflater.inflate(R.layout.camera_keyboard, null);
+        cameraLayout = (NoScrollView) outerLayout.findViewById(R.id.camera_layout);
         FrameLayout cameraContainer = (FrameLayout) cameraLayout.findViewById(R.id.camera_container);
         cameraContainer.addView(cameraPreview);
 
@@ -181,27 +183,27 @@ public class Seemoji extends InputMethodService
                     Log.d("EMOJI", String.format("ph: %s scale: %s", previewWidth, Float.toString(scale)));
 
                     Resources r = getResources();
-                    final int targetDP = 300;
+                    final int targetDP = 380;
                     final int px = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, targetDP, r.getDisplayMetrics());
-
+                    Log.d("tsneirao", String.valueOf(px));
                     ScrollView.LayoutParams slp = new ScrollView.LayoutParams((int) previewWidth, px);
                     FrameLayout.LayoutParams flp = new FrameLayout.LayoutParams((int) previewWidth, (int) (dpWidth * scale));
                     cameraPreview.setLayoutParams(flp);
                     cameraLayout.setLayoutParams(slp);
                     cameraLayout.scrollTo(0, cameraLayout.getBottom() / 2);
-                    final TextView button = (TextView) cameraLayout.findViewById(R.id.backToKeyboardtxt);
+                    final TextView button = (TextView) outerLayout.findViewById(R.id.backToKeyboardtxt);
                     button.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
                             containerView.removeAllViews();
                             if (isCameraMode) {
                                 containerView.addView(kv);
                             } else {
-                                containerView.addView(cameraLayout);
+                                containerView.addView(outerLayout);
                             }
                             isCameraMode = !isCameraMode;
                         }
                     });
-                    final ImageView selectButton = (ImageView) cameraLayout.findViewById(R.id.selectEmoji);
+                    final ImageView selectButton = (ImageView) outerLayout.findViewById(R.id.selectEmoji);
                     selectButton.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
                             InputConnection ic = getCurrentInputConnection();
