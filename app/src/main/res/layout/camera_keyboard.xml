@@ -46,5 +46,14 @@
             android:id="@+id/selectEmoji"
             android:layout_gravity="center"
             android:src="@drawable/tick" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Your emoji will appear here"
+            android:id="@+id/emojiDisplay"
+            android:layout_gravity="center_horizontal|top"
+            android:textColor="#FFFFFF" />
     </FrameLayout>
 </com.lemonslice.appathon.NoScrollView>
