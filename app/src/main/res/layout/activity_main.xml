@@ -4,11 +4,17 @@
     android:layout_height="fill_parent"
     tools:context=".MainActivity"
     android:orientation="vertical">
-    <FrameLayout
+    <com.lemonslice.appathon.NoScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:fillViewport="true"
         android:id="@+id/camera_layout">
-        </FrameLayout>
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/camera_container">
+            </FrameLayout>
+        </com.lemonslice.appathon.NoScrollView>
     <FrameLayout
         android:id="@+id/camera_overlay"
         android:layout_width="fill_parent"
