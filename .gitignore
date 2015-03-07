@@ -8,3 +8,10 @@
 /idea/misc.xml
 Appathon.iml
 app/app.iml
+cvappMac/*
+import-summary.txt
+Appathon2015.iml
+.idea/*
+app/app.iml
+app/build.gradle
+settings.gradle
