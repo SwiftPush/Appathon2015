@@ -32,6 +32,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+        if(camera==null) {
+            camera = openFrontCamera();
+        }
         try {
             camera.setPreviewDisplay(holder);
             cameraParameters = camera.getParameters();
@@ -43,6 +46,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 //            camera.setParameters(cameraParameters); // turning this on breaks face detection
 
             camera.setFaceDetectionListener(myFaceDetectionListener);
+            camera.setPreviewCallback(this);
             camera.startPreview();
             camera.startFaceDetection();
         } catch (IOException e) {
@@ -58,12 +62,14 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             camera.stopPreview();
         } catch (Exception ignored) {}
         surfaceCreated(holder);
+
+        Log.d("Test", "Surface changed");
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         assert(camera != null);
-        camera.setPreviewCallback(null);
+        //camera.setPreviewCallback(null);
         camera.stopPreview();
         camera.release();
         camera = null;
@@ -83,7 +89,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
 
         final double ASPECT_TOLERANCE = 0.1;
-        double targetRatio=(double)h / w;
+        double targetRatio = (double) h / w;
 
         if (sizes == null) return null;
 
@@ -111,13 +117,19 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         return optimalSize;
     }
 
-    @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
         if (cameraParameters.getPreviewFormat() == ImageFormat.NV21) {
             Camera.Size previewSize = cameraParameters.getPreviewSize();
+
+            YuvImage img = new YuvImage(data, ImageFormat.NV21, previewSize.width, previewSize.height, null);
+            byte[] yuvData = img.getYuvData();
+
+            EmojiDetector.get_emoji_from_image(img, previewSize.width, previewSize.height);
 //            YuvImage img = new YuvImage(data, ImageFormat.NV21, previewSize.width, previewSize.height, null);
 //            byte[] yuvData = img.getYuvData();
         }
+
+        Log.d("Testicles", "on preview frame");
     }
 
     public class MyFaceDetectionListener implements Camera.FaceDetectionListener {
@@ -128,10 +140,29 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             if (faces.length > 0) {
                 Log.d("EMOJI", "" + faces.length + "Faces detected");
                 for (Camera.Face face : faces) {
+
                     Log.d("EMOJI", "FACE FOUND AT:");
                     Log.d("EMOJI", String.format("l %d r %d top %d bottom %d", face.rect.left, face.rect.right, face.rect.top, face.rect.bottom));
                 }
             }
         }
+    }
+
+    public static Camera openFrontCamera() {
+        Camera c = null;
+        Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
+        for (int i = 0; i < Camera.getNumberOfCameras(); i++) {
+            Camera.getCameraInfo(i, cameraInfo);
+            if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+                try {
+                    c = Camera.open(i);
+                    c.setDisplayOrientation(270);
+                } catch (RuntimeException e) {
+                    Log.e("EMOJI", "Front camera did not open");
+                }
+                break;
+            }
+        }
+        return c;
     }
 }

@@ -21,7 +21,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        camera = openFrontCamera();
+        camera = cameraPreview.openFrontCamera();
         cameraPreview = new CameraPreview(this, camera);
 
         cameraLayout = (ScrollView) findViewById(R.id.camera_layout);
@@ -55,24 +55,6 @@ public class MainActivity extends Activity {
                 }
             }
         });
-    }
-
-    private Camera openFrontCamera() {
-        Camera c = null;
-        Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
-        for (int i = 0; i < Camera.getNumberOfCameras(); i++) {
-            Camera.getCameraInfo(i, cameraInfo);
-            if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-                try {
-                    c = Camera.open(i);
-                    c.setDisplayOrientation(270);
-                } catch (RuntimeException e) {
-                    Log.e("EMOJI", "Front camera did not open");
-                }
-                break;
-            }
-        }
-        return c;
     }
 
     @Override
