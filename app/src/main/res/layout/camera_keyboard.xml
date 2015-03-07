@@ -1,25 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.lemonslice.appathon.NoScrollView
-    android:layout_width="fill_parent"
+<FrameLayout
     android:layout_height="fill_parent"
-    android:fillViewport="true"
-
-    android:id="@+id/camera_layout"
+    android:layout_width="fill_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
+    <com.lemonslice.appathon.NoScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:fillViewport="true"
+        android:id="@+id/camera_layout">
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+            <FrameLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/camera_container">
+            </FrameLayout>
+        </FrameLayout>
+    </com.lemonslice.appathon.NoScrollView>
     <FrameLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-        <FrameLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/camera_container">
-        </FrameLayout>
-        <FrameLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/camera_overlay">
-            </FrameLayout>
-
+        android:layout_height="fill_parent"
+        android:id="@+id/camera_overlay">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -30,22 +32,11 @@
             android:clickable="true"
             android:textStyle="bold"
             android:textColor="#ffffffff" />
-
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Aa"
-            android:textAllCaps="false"
-            android:id="@+id/backToKeyboardBtn"
-            android:layout_gravity="right|bottom" />
-
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/selectEmoji"
             android:layout_gravity="center"
             android:src="@drawable/tick" />
-
     </FrameLayout>
-</com.lemonslice.appathon.NoScrollView>
+</FrameLayout>
