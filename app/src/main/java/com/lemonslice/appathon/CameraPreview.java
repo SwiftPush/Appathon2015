@@ -7,6 +7,7 @@ import android.hardware.Camera;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.TextView;
 
 import java.io.IOException;
 import java.util.List;
@@ -128,6 +129,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             Log.d("Sam", xxx.toString());
 
             setCurrEmoji(xxx.toString());
+
 //            YuvImage img = new YuvImage(data, ImageFormat.NV21, previewSize.width, previewSize.height, null);
 //            byte[] yuvData = img.getYuvData();
         }
@@ -171,10 +173,12 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     }
 
     public String getCurrEmoji() {
+
         return currEmoji;
     }
 
     public void setCurrEmoji(String newEmoji) {
         currEmoji = newEmoji;
+
     }
 }

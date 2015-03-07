@@ -209,6 +209,7 @@ public class Seemoji extends InputMethodService
                             InputConnection ic = getCurrentInputConnection();
                             String codex;
                             codex = stringToEmoji(cameraPreview.getCurrEmoji());
+
                             ic.commitText(codex,1);
                         }
                     });
@@ -272,4 +273,5 @@ public class Seemoji extends InputMethodService
         }
         return codex;
     }
+
 }
