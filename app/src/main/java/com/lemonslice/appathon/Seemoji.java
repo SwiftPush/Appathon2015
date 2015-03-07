@@ -8,6 +8,7 @@ import android.inputmethodservice.KeyboardView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputConnection;
 import android.widget.FrameLayout;
 
@@ -129,11 +130,11 @@ public class Seemoji extends InputMethodService
     }
     @Override
     public View onCreateInputView() {
-        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
         containerView = new FrameLayout(this);
-        containerView.setLayoutParams(lp);
 
         cameraPreview = new CameraPreview(this, openFrontCamera());
+        ViewGroup.LayoutParams clp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 500);
+        cameraPreview.setLayoutParams(clp);
 
         kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard, null);
         keyboard = new Keyboard(this, R.xml.qwerty);
