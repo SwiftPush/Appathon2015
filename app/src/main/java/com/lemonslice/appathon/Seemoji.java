@@ -25,7 +25,12 @@ public class Seemoji extends InputMethodService
         String codex;
         switch(primaryCode){
             case Keyboard.KEYCODE_DELETE :
-                ic.deleteSurroundingText(1, 0);
+                int delcount = 1;
+                String tmp = (String)ic.getTextBeforeCursor(2,0);
+                if (tmp.length() >0 ) {
+                    delcount++;
+                }
+                ic.deleteSurroundingText(delcount, 0);
                 break;
             case Keyboard.KEYCODE_SHIFT:
                 //Use this for activating camera
