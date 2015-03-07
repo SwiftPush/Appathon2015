@@ -156,7 +156,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
                 try {
                     c = Camera.open(i);
-                    c.setDisplayOrientation(270);
+                    c.getCameraInfo(i,cameraInfo);
+                    c.setDisplayOrientation(cameraInfo.orientation);
                 } catch (RuntimeException e) {
                     Log.e("EMOJI", "Front camera did not open");
                 }
