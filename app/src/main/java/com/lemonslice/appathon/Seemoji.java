@@ -16,6 +16,7 @@ import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputConnection;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -200,6 +201,15 @@ public class Seemoji extends InputMethodService
                                 containerView.addView(cameraLayout);
                             }
                             isCameraMode = !isCameraMode;
+                        }
+                    });
+                    final ImageView selectButton = (ImageView) cameraLayout.findViewById(R.id.selectEmoji);
+                    selectButton.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            InputConnection ic = getCurrentInputConnection();
+                            String codex;
+                            codex = "\uD83D\uDE03";
+                            ic.commitText(codex,1);
                         }
                     });
                 }
