@@ -29,8 +29,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     public String currEmoji = "";
     Camera.Parameters cameraParameters;
 
-    Rect faceDetected;
-    Boolean bFace = false;
+    static Rect faceDetected;
+    static Boolean bFace;
 
     public CameraPreview(Context context, Camera camera) {
         super(context);
@@ -138,8 +138,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
             EmojiDetector.get_emoji_from_image(img, previewSize.width, previewSize.height);
 
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-
             if(MainActivity.hello == 1) {
                 MainActivity.hello = 0;
 
@@ -147,6 +145,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                 {
                     Log.d("James","Saving new face");
                     bFace = false;
+                    ByteArrayOutputStream out = new ByteArrayOutputStream();
                     img.compressToJpeg(new Rect(0, 0, previewSize.width, previewSize.height), 80, out);
 
                     File outputFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) , "/test.jpg");
