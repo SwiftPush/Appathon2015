@@ -32,6 +32,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+        if(camera==null) {
+            camera = openFrontCamera();
+        }
         try {
             camera.setPreviewDisplay(holder);
             cameraParameters = camera.getParameters();
@@ -115,15 +118,12 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     public void onPreviewFrame(byte[] data, Camera camera) {
         if (cameraParameters.getPreviewFormat() == ImageFormat.NV21) {
             Camera.Size previewSize = cameraParameters.getPreviewSize();
-<<<<<<< HEAD
             YuvImage img = new YuvImage(data, ImageFormat.NV21, previewSize.width, previewSize.height, null);
             byte[] yuvData = img.getYuvData();
 
             EmojiDetector.get_emoji_from_image(img, previewSize.width, previewSize.height);
-=======
 //            YuvImage img = new YuvImage(data, ImageFormat.NV21, previewSize.width, previewSize.height, null);
 //            byte[] yuvData = img.getYuvData();
->>>>>>> 6ec3b75ecb63af4d758c8a27447ab721d0736dc9
         }
     }
 
@@ -140,5 +140,23 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                 }
             }
         }
+    }
+
+    public static Camera openFrontCamera() {
+        Camera c = null;
+        Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
+        for (int i = 0; i < Camera.getNumberOfCameras(); i++) {
+            Camera.getCameraInfo(i, cameraInfo);
+            if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+                try {
+                    c = Camera.open(i);
+                    c.setDisplayOrientation(270);
+                } catch (RuntimeException e) {
+                    Log.e("EMOJI", "Front camera did not open");
+                }
+                break;
+            }
+        }
+        return c;
     }
 }
