@@ -1,16 +1,20 @@
 package com.lemonslice.appathon;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.hardware.Camera;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputConnection;
 import android.widget.FrameLayout;
+import android.widget.ScrollView;
 
 /**
  * Created by Sam on 07/03/2015.
@@ -20,11 +24,12 @@ public class Seemoji extends InputMethodService
 
     private KeyboardView kv;
     private Keyboard keyboard;
-    private FrameLayout containerView;
     private CameraPreview cameraPreview;
 
-    private boolean isCameraMode = false;
+    private NoScrollView cameraLayout;
 
+    private FrameLayout containerView;
+    private boolean isCameraMode = false;
     private boolean caps = false;
 
     @Override
@@ -46,7 +51,7 @@ public class Seemoji extends InputMethodService
                 if (isCameraMode) {
                     containerView.addView(kv);
                 } else {
-                    containerView.addView(cameraPreview);
+                    containerView.addView(cameraLayout);
                 }
                 isCameraMode = !isCameraMode;
 
@@ -139,16 +144,49 @@ public class Seemoji extends InputMethodService
     }
     @Override
     public View onCreateInputView() {
+        LayoutInflater layoutInflater = getLayoutInflater();
+
         containerView = new FrameLayout(this);
 
         cameraPreview = new CameraPreview(this, openFrontCamera());
-        ViewGroup.LayoutParams clp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 500);
-        cameraPreview.setLayoutParams(clp);
+        cameraLayout = (NoScrollView) layoutInflater.inflate(R.layout.camera_keyboard, null);
+        FrameLayout cameraContainer = (FrameLayout) cameraLayout.findViewById(R.id.camera_container);
+        cameraContainer.addView(cameraPreview);
 
-        kv = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard, null);
+        kv = (KeyboardView) layoutInflater.inflate(R.layout.keyboard, null);
         keyboard = new Keyboard(this, R.xml.qwerty);
         kv.setKeyboard(keyboard);
         kv.setOnKeyboardActionListener(this);
+
+        final int keyboardHeight = kv.getHeight();
+
+        ViewTreeObserver viewTreeObserver = cameraPreview.getViewTreeObserver();
+        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            boolean changedLayout = false;
+            @Override
+            public void onGlobalLayout() {
+                if (!changedLayout) {
+                    changedLayout = true;
+                    Camera.Size size = cameraPreview.camera.getParameters().getPreviewSize();
+                    float density = Resources.getSystem().getDisplayMetrics().density;
+                    float dpHeight = size.height / density;
+                    float dpWidth = size.width / density;
+                    Log.d("EMOJI", String.format("dp (%f,%f)", dpWidth, dpHeight));
+
+                    // n.b it may seem like I'm using the wrong width vs height values, this is because the camera view is in landscape
+                    float previewWidth = cameraPreview.getWidth();
+                    float scale = previewWidth / dpHeight;
+                    Log.d("EMOJI", String.format("ph: %s scale: %s", previewWidth, Float.toString(scale)));
+
+                    ScrollView.LayoutParams slp = new ScrollView.LayoutParams((int) previewWidth, 1200);
+                    FrameLayout.LayoutParams flp = new FrameLayout.LayoutParams((int) previewWidth, (int) (dpWidth * scale));
+                    cameraPreview.setLayoutParams(flp);
+                    cameraLayout.setLayoutParams(slp);
+                    cameraLayout.scrollTo(0, cameraLayout.getBottom() / 2);
+                }
+            }
+        });
+
 
         containerView.addView(kv);
 

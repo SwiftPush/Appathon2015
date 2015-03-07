@@ -28,7 +28,7 @@ public class MainActivity extends Activity {
         cameraContainer = (FrameLayout) findViewById(R.id.camera_container);
         cameraContainer.addView(cameraPreview);
 
-        // view tree observer lets me set the size of the camera preview view at runtime
+        // view tree observer lets us set the size of the camera preview view at runtime
         ViewTreeObserver viewTreeObserver = cameraPreview.getViewTreeObserver();
         viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             boolean changedLayout = false;
