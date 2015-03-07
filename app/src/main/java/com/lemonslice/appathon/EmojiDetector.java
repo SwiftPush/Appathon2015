@@ -226,6 +226,11 @@ final public class EmojiDetector {
 
     static rgb yuv_to_rgb(byte[] data, int width, int height, int x, int y)
     {
+        // TODO: Likely bug here
+        if(y*width + x >= data.length)
+            return new rgb(0);
+
+
         int Y = data[y*width + x] & 0xff;
 
         // Get U and V values, stored after Y values, one per 2x2 block
@@ -235,6 +240,11 @@ final public class EmojiDetector {
         int yby2 = y/2;
 
         // make this V for NV12/420SP
+
+        // TODO: Likely bug here
+        if(width*height + 2*xby2 + 1 + yby2*width >= data.length)
+            return new rgb(0);
+
         float U = (float)(data[width*height + 2*xby2 + yby2*width] & 0xff) - 128.0f;
 
         // make this U for NV12/420SP
