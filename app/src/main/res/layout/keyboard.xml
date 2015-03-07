@@ -7,4 +7,6 @@
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"
     android:keyPreviewLayout ="@layout/preview"
+    android:keyPreviewOffset="40dp"
+    android:keyPreviewHeight="120dp"
     />

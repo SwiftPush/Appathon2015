@@ -9,8 +9,9 @@
         <item name="android:keyTextColor">#22343D</item>
         <item name="android:keyTextSize">20dp</item>
         <item name="android:shadowRadius">0</item>
-        <item name="android:background">@android:color/darker_gray</item>
+        <item name="android:background">#e2e5e6</item>
         <item name="android:keyPreviewLayout">@layout/preview</item>
+        <item name="android:keyPreviewHeight">120dp</item>
     </style>
 
 </resources>

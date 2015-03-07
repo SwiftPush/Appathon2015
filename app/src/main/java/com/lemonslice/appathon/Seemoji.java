@@ -103,10 +103,19 @@ public class Seemoji extends InputMethodService
 
     @Override
     public void onPress(int primaryCode) {
+        int keyCodeSpace = 32;
+        if((primaryCode == Keyboard.KEYCODE_DELETE)
+                || (primaryCode==Keyboard.KEYCODE_DONE)
+                || (primaryCode==Keyboard.KEYCODE_SHIFT)
+                || (primaryCode==keyCodeSpace)
+                ) {
+            kv.setPreviewEnabled(false);
+        }
     }
 
     @Override
     public void onRelease(int primaryCode) {
+        kv.setPreviewEnabled(true);
     }
 
     @Override
