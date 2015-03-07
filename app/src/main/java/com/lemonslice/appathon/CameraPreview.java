@@ -1,6 +1,8 @@
 package com.lemonslice.appathon;
 
 import android.content.Context;
+import android.graphics.ImageFormat;
+import android.graphics.YuvImage;
 import android.hardware.Camera;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -12,16 +14,19 @@ import java.util.List;
 /**
  * Created by alexander on 3/7/15.
  */
-public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
+public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback, Camera.PreviewCallback{
     public Camera camera;
     private SurfaceHolder viewHolder;
     private MyFaceDetectionListener myFaceDetectionListener;
+
+    Camera.Parameters cameraParameters;
 
     public CameraPreview(Context context, Camera camera) {
         super(context);
         this.camera = camera;
         viewHolder = getHolder();
         viewHolder.addCallback(this);
+        camera.setPreviewCallback(this);
         myFaceDetectionListener = new MyFaceDetectionListener();
     }
 
@@ -29,13 +34,12 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     public void surfaceCreated(SurfaceHolder holder) {
         try {
             camera.setPreviewDisplay(holder);
-            Camera.Parameters parameters = camera.getParameters();
-            Log.d("EMOJI", "surfaceview " + getWidth() + " " + getHeight());
-            Camera.Size optimalPreviewSize = getOptimalPreviewSize(getWidth(), getHeight());
-            Log.d("EMOJI", "optimalsize " + optimalPreviewSize.width + " " + optimalPreviewSize.height);
-            Log.d("EMOJI", "Max detectable faces:" + parameters.getMaxNumDetectedFaces());
-            parameters.setPreviewSize(optimalPreviewSize.width, optimalPreviewSize.height);
-//            camera.setParameters(parameters); // turning this on
+            cameraParameters = camera.getParameters();
+
+//            Camera.Size optimalPreviewSize = getOptimalPreviewSize(getWidth(), getHeight());
+//            cameraParameters.setPreviewSize(optimalPreviewSize.width, optimalPreviewSize.height);
+//            camera.setParameters(cameraParameters); // turning this on breaks face detection
+
             camera.setFaceDetectionListener(myFaceDetectionListener);
             camera.startPreview();
             camera.startFaceDetection();
@@ -103,6 +107,15 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             }
         }
         return optimalSize;
+    }
+
+    @Override
+    public void onPreviewFrame(byte[] data, Camera camera) {
+        if (cameraParameters.getPreviewFormat() == ImageFormat.NV21) {
+            Camera.Size previewSize = cameraParameters.getPreviewSize();
+            YuvImage img = new YuvImage(data, ImageFormat.NV21, previewSize.width, previewSize.height, null);
+            byte[] yuvData = img.getYuvData();
+        }
     }
 
     public class MyFaceDetectionListener implements Camera.FaceDetectionListener {
