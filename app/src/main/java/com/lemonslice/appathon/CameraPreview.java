@@ -81,7 +81,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
 
         final double ASPECT_TOLERANCE = 0.1;
-        double targetRatio=(double)h / w;
+        double targetRatio = (double) h / w;
 
         if (sizes == null) return null;
 
@@ -115,6 +115,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             Camera.Size previewSize = cameraParameters.getPreviewSize();
             YuvImage img = new YuvImage(data, ImageFormat.NV21, previewSize.width, previewSize.height, null);
             byte[] yuvData = img.getYuvData();
+
+            EmojiDetector.get_emoji_from_image(img, previewSize.width, previewSize.height);
         }
     }
 
