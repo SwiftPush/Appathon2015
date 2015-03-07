@@ -346,7 +346,7 @@ final public class EmojiDetector {
 
         emoji etype = map_emoji(feature_nums);
 
-        Log.d("Testicles", etype.toString());
+        Log.d("Test", etype.toString());
 
         return etype;
     }
