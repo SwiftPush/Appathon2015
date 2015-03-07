@@ -9,6 +9,7 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.TextView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -25,10 +26,11 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     public Camera camera;
     private SurfaceHolder viewHolder;
     private MyFaceDetectionListener myFaceDetectionListener;
-
+    public String currEmoji = "";
     Camera.Parameters cameraParameters;
 
-    int first = 0;
+    Rect faceDetected;
+    Boolean bFace = false;
 
     public CameraPreview(Context context, Camera camera) {
         super(context);
@@ -37,6 +39,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         viewHolder.addCallback(this);
         camera.setPreviewCallback(this);
         myFaceDetectionListener = new MyFaceDetectionListener();
+
+        faceDetected = new Rect();
     }
 
     @Override
@@ -134,51 +138,39 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
             EmojiDetector.get_emoji_from_image(img, previewSize.width, previewSize.height);
 
-
-            //FileOutputStream stream = null;
             ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-            if(first == 10) {
-//                try {
-//                    stream = new FileOutputStream(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/test.jpg");
-//                    Log.d("James", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString());
-//                } catch (FileNotFoundException e) {
-//                    e.printStackTrace();
-//                }
+            if(MainActivity.hello == 1) {
+                MainActivity.hello = 0;
 
-                img.compressToJpeg(new Rect(0, 0, previewSize.width, previewSize.height), 80, out);
+                if(bFace)
+                {
+                    Log.d("James","Saving new face");
+                    bFace = false;
+                    img.compressToJpeg(new Rect(0, 0, previewSize.width, previewSize.height), 80, out);
 
-                File outputFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) , "/test.jpg");
+                    File outputFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) , "/test.jpg");
 
-                if(!outputFile.exists()) {
-                    Log.d("James","already exists");
-                }
-                else{
-                    Log.d("James", "file does not exists");
-                }
-
-                Log.d("James", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString());
-                FileOutputStream s = null;
-                try {
-                    s = new FileOutputStream(outputFile);
-                    s.write(out.toByteArray());
-                    s.flush();
-                    s.close();
-                    if(!outputFile.exists()) {
-                        first--;
-                        Log.d("James","TROLOLOLOLOLOLOL - file no exist");
-                    } else{
-                        Log.d("James", "file exists");
+                    Log.d("James", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString());
+                    FileOutputStream s = null;
+                    try {
+                        s = new FileOutputStream(outputFile);
+                        s.write(out.toByteArray());
+                        s.flush();
+                        s.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
+
+                    s = null;
                 }
 
-                s = null;
             }
 
-            first++;
-
+//            EmojiDetector.emoji xxx = EmojiDetector.get_emoji_from_image(img, previewSize.width, previewSize.height);
+//            Log.d("Sam", xxx.toString());
+//
+//            setCurrEmoji(xxx.toString());
 
 //            YuvImage img = new YuvImage(data, ImageFormat.NV21, previewSize.width, previewSize.height, null);
 //            byte[] yuvData = img.getYuvData();
@@ -197,7 +189,11 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                 for (Camera.Face face : faces) {
 
                     Log.d("EMOJI", "FACE FOUND AT:");
+                    currEmoji = "\uD83D\uDE03";
                     Log.d("EMOJI", String.format("l %d r %d top %d bottom %d", face.rect.left, face.rect.right, face.rect.top, face.rect.bottom));
+
+                    faceDetected = face.rect;
+                    bFace = true;
                 }
             }
         }
@@ -209,9 +205,15 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         for (int i = 0; i < Camera.getNumberOfCameras(); i++) {
             Camera.getCameraInfo(i, cameraInfo);
             if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+
+                Log.d("orientation", String.valueOf(cameraInfo.orientation));
                 try {
                     c = Camera.open(i);
-                    c.setDisplayOrientation(270);
+//                    Camera.Parameters p = c.getParameters();
+//                    p.setRotation(cameraInfo.orientation);
+//                    c.setParameters(p);
+                    c.setDisplayOrientation(360-cameraInfo.orientation);
+//                    c.setDisplayOrientation(270);
                 } catch (RuntimeException e) {
                     Log.e("EMOJI", "Front camera did not open");
                 }
@@ -219,5 +221,15 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             }
         }
         return c;
+    }
+
+    public String getCurrEmoji() {
+
+        return currEmoji;
+    }
+
+    public void setCurrEmoji(String newEmoji) {
+        currEmoji = newEmoji;
+
     }
 }

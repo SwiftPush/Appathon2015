@@ -39,5 +39,13 @@
             android:textAllCaps="false"
             android:id="@+id/backToKeyboardBtn"
             android:layout_gravity="right|bottom" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/selectEmoji"
+            android:layout_gravity="center"
+            android:src="@drawable/tick" />
+
     </FrameLayout>
 </com.lemonslice.appathon.NoScrollView>

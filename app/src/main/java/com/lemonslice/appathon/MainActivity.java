@@ -16,12 +16,14 @@ public class MainActivity extends Activity {
     private ScrollView cameraLayout;
     private FrameLayout cameraContainer;
 
+    static int hello = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        camera = cameraPreview.openFrontCamera();
+        camera = CameraPreview.openFrontCamera();
         cameraPreview = new CameraPreview(this, camera);
 
         cameraLayout = (ScrollView) findViewById(R.id.camera_layout);
@@ -52,6 +54,13 @@ public class MainActivity extends Activity {
                     cameraPreview.setLayoutParams(flp);
                     cameraLayout.setLayoutParams(slp);
                     cameraLayout.scrollTo(0, cameraLayout.getBottom()/2);
+
+                    cameraPreview.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            hello = 1;
+                        }
+                    });
                 }
             }
         });
