@@ -64,7 +64,7 @@ public class Seemoji extends InputMethodService
                 break;
             case 1341 :
                 //wink-grin
-                codex = "\uD83D\uDE05";
+                codex = "\uD83D\uDE06";
                 ic.commitText(codex,1);
                 break;
             case 1342 :
