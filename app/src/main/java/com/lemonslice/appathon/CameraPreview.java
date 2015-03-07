@@ -2,13 +2,20 @@ package com.lemonslice.appathon;
 
 import android.content.Context;
 import android.graphics.ImageFormat;
+import android.graphics.Rect;
 import android.graphics.YuvImage;
 import android.hardware.Camera;
+import android.os.Environment;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
 /**
@@ -20,6 +27,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     private MyFaceDetectionListener myFaceDetectionListener;
 
     Camera.Parameters cameraParameters;
+
+    int first = 0;
 
     public CameraPreview(Context context, Camera camera) {
         super(context);
@@ -122,9 +131,55 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             Camera.Size previewSize = cameraParameters.getPreviewSize();
 
             YuvImage img = new YuvImage(data, ImageFormat.NV21, previewSize.width, previewSize.height, null);
-            byte[] yuvData = img.getYuvData();
 
             EmojiDetector.get_emoji_from_image(img, previewSize.width, previewSize.height);
+
+
+            //FileOutputStream stream = null;
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+            if(first == 10) {
+//                try {
+//                    stream = new FileOutputStream(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/test.jpg");
+//                    Log.d("James", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString());
+//                } catch (FileNotFoundException e) {
+//                    e.printStackTrace();
+//                }
+
+                img.compressToJpeg(new Rect(0, 0, previewSize.width, previewSize.height), 80, out);
+
+                File outputFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) , "/test.jpg");
+
+                if(!outputFile.exists()) {
+                    Log.d("James","already exists");
+                }
+                else{
+                    Log.d("James", "file does not exists");
+                }
+
+                Log.d("James", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString());
+                FileOutputStream s = null;
+                try {
+                    s = new FileOutputStream(outputFile);
+                    s.write(out.toByteArray());
+                    s.flush();
+                    s.close();
+                    if(!outputFile.exists()) {
+                        first--;
+                        Log.d("James","TROLOLOLOLOLOLOL - file no exist");
+                    } else{
+                        Log.d("James", "file exists");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                s = null;
+            }
+
+            first++;
+
+
 //            YuvImage img = new YuvImage(data, ImageFormat.NV21, previewSize.width, previewSize.height, null);
 //            byte[] yuvData = img.getYuvData();
         }
