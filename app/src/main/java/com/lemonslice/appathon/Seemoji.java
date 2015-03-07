@@ -22,6 +22,7 @@ public class Seemoji extends InputMethodService
     @Override
     public void onKey(int primaryCode, int[] keyCodes) {
         InputConnection ic = getCurrentInputConnection();
+        String codex;
         switch(primaryCode){
             case Keyboard.KEYCODE_DELETE :
                 ic.deleteSurroundingText(1, 0);
@@ -34,6 +35,41 @@ public class Seemoji extends InputMethodService
                 break;
             case Keyboard.KEYCODE_DONE:
                 ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
+                break;
+            case 1337 :
+                //smile
+                codex = "\uD83D\uDE03";
+                ic.commitText(codex,1);
+                break;
+            case 1338 :
+                //grin
+                codex = "\uD83D\uDE04";
+                ic.commitText(codex,1);
+                break;
+            case 1339 :
+                //tongue
+                codex = "\uD83D\uDE1B";
+                ic.commitText(codex,1);
+                break;
+            case 1340 :
+                //wink-smile
+                codex = "\uD83D\uDE09";
+                ic.commitText(codex,1);
+                break;
+            case 1341 :
+                //wink-grin
+                codex = "\uD83D\uDE05";
+                ic.commitText(codex,1);
+                break;
+            case 1342 :
+                //wink-tongue
+                codex = "\uD83D\uDE1C";
+                ic.commitText(codex,1);
+                break;
+            case 1343 :
+                //sunglasses
+                codex = "\uD83D\uDE0E";
+                ic.commitText(codex,1);
                 break;
             default:
                 char code = (char)primaryCode;
