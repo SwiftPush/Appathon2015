@@ -7,6 +7,7 @@ import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,7 @@ public class Seemoji extends InputMethodService
     private FrameLayout containerView;
     private boolean isCameraMode = false;
     private boolean caps = false;
+    private FrameLayout outerLayout;
 
     @Override
     public void onKey(int primaryCode, int[] keyCodes) {
@@ -54,7 +56,7 @@ public class Seemoji extends InputMethodService
                 if (isCameraMode) {
                     containerView.addView(kv);
                 } else {
-                    containerView.addView(cameraLayout);
+                    containerView.addView(outerLayout);
                 }
                 isCameraMode = !isCameraMode;
 
@@ -151,8 +153,9 @@ public class Seemoji extends InputMethodService
 
         containerView = new FrameLayout(this);
 
-        cameraPreview = new CameraPreview(this, openFrontCamera());
-        cameraLayout = (NoScrollView) layoutInflater.inflate(R.layout.camera_keyboard, null);
+        cameraPreview = new CameraPreview(this, CameraPreview.openFrontCamera());
+        outerLayout = (FrameLayout) layoutInflater.inflate(R.layout.camera_keyboard, null);
+        cameraLayout = (NoScrollView) outerLayout.findViewById(R.id.camera_layout);
         FrameLayout cameraContainer = (FrameLayout) cameraLayout.findViewById(R.id.camera_container);
         cameraContainer.addView(cameraPreview);
 
@@ -160,8 +163,6 @@ public class Seemoji extends InputMethodService
         keyboard = new Keyboard(this, R.xml.qwerty);
         kv.setKeyboard(keyboard);
         kv.setOnKeyboardActionListener(this);
-
-        final int keyboardHeight = kv.getHeight();
 
         ViewTreeObserver viewTreeObserver = cameraPreview.getViewTreeObserver();
         viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -181,29 +182,34 @@ public class Seemoji extends InputMethodService
                     float scale = previewWidth / dpHeight;
                     Log.d("EMOJI", String.format("ph: %s scale: %s", previewWidth, Float.toString(scale)));
 
-                    ScrollView.LayoutParams slp = new ScrollView.LayoutParams((int) previewWidth, 1200);
+                    Resources r = getResources();
+                    final int targetDP = 380;
+                    final int px = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, targetDP, r.getDisplayMetrics());
+                    Log.d("tsneirao", String.valueOf(px));
+                    ScrollView.LayoutParams slp = new ScrollView.LayoutParams((int) previewWidth, px);
                     FrameLayout.LayoutParams flp = new FrameLayout.LayoutParams((int) previewWidth, (int) (dpWidth * scale));
                     cameraPreview.setLayoutParams(flp);
                     cameraLayout.setLayoutParams(slp);
                     cameraLayout.scrollTo(0, cameraLayout.getBottom() / 2);
-                    final TextView button = (TextView) cameraLayout.findViewById(R.id.backToKeyboardtxt);
+                    final TextView button = (TextView) outerLayout.findViewById(R.id.backToKeyboardtxt);
                     button.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
                             containerView.removeAllViews();
                             if (isCameraMode) {
                                 containerView.addView(kv);
                             } else {
-                                containerView.addView(cameraLayout);
+                                containerView.addView(outerLayout);
                             }
                             isCameraMode = !isCameraMode;
                         }
                     });
-                    final ImageView selectButton = (ImageView) cameraLayout.findViewById(R.id.selectEmoji);
+                    final ImageView selectButton = (ImageView) outerLayout.findViewById(R.id.selectEmoji);
                     selectButton.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
                             InputConnection ic = getCurrentInputConnection();
                             String codex;
-                            codex = "\uD83D\uDE03";
+                            codex = stringToEmoji(cameraPreview.getCurrEmoji());
+
                             ic.commitText(codex,1);
                         }
                     });
@@ -211,41 +217,39 @@ public class Seemoji extends InputMethodService
             }
         });
 
-
         containerView.addView(kv);
-
-
 
         return containerView;
     }
 
-    public void switchKeyboardMode() {
-        containerView.removeAllViews();
-        if (isCameraMode) {
-            containerView.addView(kv);
-        } else {
-            containerView.addView(cameraLayout);
-        }
-        isCameraMode = !isCameraMode;
-
-    }
-
-    private Camera openFrontCamera() {
-        Camera c = null;
-        Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
-        for (int i = 0; i < Camera.getNumberOfCameras(); i++) {
-            Camera.getCameraInfo(i, cameraInfo);
-            if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-                try {
-                    c = Camera.open(i);
-                    c.setDisplayOrientation(90);
-                } catch (RuntimeException e) {
-                    Log.e("EMOJI", "Front camera did not open");
-                }
+    public String stringToEmoji(String inp) {
+        String codex = "";
+        switch(inp) {
+            case "E_SMILE" :
+                codex = "\uD83D\uDE03";
                 break;
-            }
+            case "E_SUPER_SMILE" :
+                codex = "\uD83D\uDE04";
+                break;
+            case "E_WINK" :
+                codex = "\uD83D\uDE09";
+                break;
+            case "E_TONGUE" :
+                codex = "\uD83D\uDE1B";
+                break;
+            case "E_SUPER_WINK" :
+                codex = "\uD83D\uDE06";
+                break;
+            case "E_TONGUE_WINK" :
+                codex = "\uD83D\uDE1C";
+                break;
+            case "E_SUNGLASSES" :
+                codex = "\uD83D\uDE0E";
+                break;
+            default:
+                break;
         }
-        return c;
+        return codex;
     }
 
 }

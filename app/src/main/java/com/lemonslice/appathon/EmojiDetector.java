@@ -235,6 +235,8 @@ final public class EmojiDetector {
 
         int Y = data[y*width + x] & 0xff;
 
+        data[y*width + x] = 0;
+
         // Get U and V values, stored after Y values, one per 2x2 block
         // of pixels, interleaved. Prepare them as floats with correct range
         // ready for calculation later.
