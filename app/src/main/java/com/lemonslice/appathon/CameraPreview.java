@@ -113,8 +113,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     public void onPreviewFrame(byte[] data, Camera camera) {
         if (cameraParameters.getPreviewFormat() == ImageFormat.NV21) {
             Camera.Size previewSize = cameraParameters.getPreviewSize();
-            YuvImage img = new YuvImage(data, ImageFormat.NV21, previewSize.width, previewSize.height, null);
-            byte[] yuvData = img.getYuvData();
+//            YuvImage img = new YuvImage(data, ImageFormat.NV21, previewSize.width, previewSize.height, null);
+//            byte[] yuvData = img.getYuvData();
         }
     }
 

@@ -1,6 +1,7 @@
 package com.lemonslice.appathon;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,10 +19,22 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         camera = openFrontCamera();
+//        ViewGroup.LayoutParams clp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 500);
         cameraPreview = new CameraPreview(this, camera);
+//        cameraPreview.setLayoutParams(clp);
 
+        Camera.Size size = camera.getParameters().getPreviewSize();
+        float density = Resources.getSystem().getDisplayMetrics().density;
+        float aspectRatio = (float)size.width/(float)size.height;
+        int dp_height = (int) (size.height / density);
+        int dp_width = (int) (size.width / density);
+        Log.d("EMOJI", String.format("dp (%d,%d)", dp_width, dp_height));
+
+        FrameLayout.LayoutParams flp = new FrameLayout.LayoutParams(dp_height, dp_width);
         FrameLayout cameraLayout = (FrameLayout) findViewById(R.id.camera_layout);
+        cameraLayout.setLayoutParams(flp);
         cameraLayout.addView(cameraPreview);
+
     }
 
     private Camera openFrontCamera() {
@@ -33,10 +46,6 @@ public class MainActivity extends Activity {
                 try {
                     c = Camera.open(i);
                     c.setDisplayOrientation(270);
-                    Camera.Parameters p = c.getParameters();
-                    Camera.Size previewSize = p.getPreferredPreviewSizeForVideo();
-                    Log.d("EMOJI", "" + previewSize.width + " " + previewSize.height);
-                    p.setPreviewSize(previewSize.width - 100, previewSize.height);
                 } catch (RuntimeException e) {
                     Log.e("EMOJI", "Front camera did not open");
                 }
