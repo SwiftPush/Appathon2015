@@ -152,7 +152,7 @@ public class Seemoji extends InputMethodService
 
         containerView = new FrameLayout(this);
 
-        cameraPreview = new CameraPreview(this, openFrontCamera());
+        cameraPreview = new CameraPreview(this, CameraPreview.openFrontCamera());
         cameraLayout = (NoScrollView) layoutInflater.inflate(R.layout.camera_keyboard, null);
         FrameLayout cameraContainer = (FrameLayout) cameraLayout.findViewById(R.id.camera_container);
         cameraContainer.addView(cameraPreview);
@@ -161,8 +161,6 @@ public class Seemoji extends InputMethodService
         keyboard = new Keyboard(this, R.xml.qwerty);
         kv.setKeyboard(keyboard);
         kv.setOnKeyboardActionListener(this);
-
-        final int keyboardHeight = kv.getHeight();
 
         ViewTreeObserver viewTreeObserver = cameraPreview.getViewTreeObserver();
         viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -217,31 +215,9 @@ public class Seemoji extends InputMethodService
             }
         });
 
-
         containerView.addView(kv);
 
-
-
         return containerView;
-    }
-
-
-    private Camera openFrontCamera() {
-        Camera c = null;
-        Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
-        for (int i = 0; i < Camera.getNumberOfCameras(); i++) {
-            Camera.getCameraInfo(i, cameraInfo);
-            if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-                try {
-                    c = Camera.open(i);
-                    c.setDisplayOrientation(90);
-                } catch (RuntimeException e) {
-                    Log.e("EMOJI", "Front camera did not open");
-                }
-                break;
-            }
-        }
-        return c;
     }
 
     public String stringToEmoji(String inp) {
