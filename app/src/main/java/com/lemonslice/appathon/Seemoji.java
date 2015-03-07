@@ -7,6 +7,7 @@ import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -180,7 +181,11 @@ public class Seemoji extends InputMethodService
                     float scale = previewWidth / dpHeight;
                     Log.d("EMOJI", String.format("ph: %s scale: %s", previewWidth, Float.toString(scale)));
 
-                    ScrollView.LayoutParams slp = new ScrollView.LayoutParams((int) previewWidth, 1200);
+                    Resources r = getResources();
+                    final int targetDP = 300;
+                    final int px = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, targetDP, r.getDisplayMetrics());
+
+                    ScrollView.LayoutParams slp = new ScrollView.LayoutParams((int) previewWidth, px);
                     FrameLayout.LayoutParams flp = new FrameLayout.LayoutParams((int) previewWidth, (int) (dpWidth * scale));
                     cameraPreview.setLayoutParams(flp);
                     cameraLayout.setLayoutParams(slp);
