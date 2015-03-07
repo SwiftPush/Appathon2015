@@ -36,6 +36,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             camera.setPreviewDisplay(holder);
             cameraParameters = camera.getParameters();
 
+            Log.d("EMOJI", "CP HEIGHT: " + getHeight());
+
 //            Camera.Size optimalPreviewSize = getOptimalPreviewSize(getWidth(), getHeight());
 //            cameraParameters.setPreviewSize(optimalPreviewSize.width, optimalPreviewSize.height);
 //            camera.setParameters(cameraParameters); // turning this on breaks face detection
@@ -113,8 +115,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     public void onPreviewFrame(byte[] data, Camera camera) {
         if (cameraParameters.getPreviewFormat() == ImageFormat.NV21) {
             Camera.Size previewSize = cameraParameters.getPreviewSize();
-            YuvImage img = new YuvImage(data, ImageFormat.NV21, previewSize.width, previewSize.height, null);
-            byte[] yuvData = img.getYuvData();
+//            YuvImage img = new YuvImage(data, ImageFormat.NV21, previewSize.width, previewSize.height, null);
+//            byte[] yuvData = img.getYuvData();
         }
     }
 

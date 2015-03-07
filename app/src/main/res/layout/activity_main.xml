@@ -1,17 +1,23 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     tools:context=".MainActivity"
-    android:orientation="horizontal">
-    <FrameLayout
+    android:orientation="vertical">
+    <com.lemonslice.appathon.NoScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:fillViewport="true"
         android:id="@+id/camera_layout">
-        </FrameLayout>
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/camera_container">
+            </FrameLayout>
+        </com.lemonslice.appathon.NoScrollView>
     <FrameLayout
         android:id="@+id/camera_overlay"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
         </FrameLayout>
-</LinearLayout>
+</FrameLayout>
