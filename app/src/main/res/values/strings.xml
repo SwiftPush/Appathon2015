@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Appathon</string>
-
+    <string name="seemoji">Seemoji</string>
+    <string name="subtype_en_US">English (UK)</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 </resources>
