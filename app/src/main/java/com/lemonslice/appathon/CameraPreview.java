@@ -245,4 +245,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     public void toungeButton() {
 
     }
+    public void mouthButton() {
+
+    }
 }
