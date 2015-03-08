@@ -233,4 +233,16 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     public void setCurrEmoji(String newEmoji) {
         currEmoji = newEmoji;
     }
+
+    public void smileButton() {
+
+    }
+
+    public void winkButton() {
+
+    }
+
+    public void toungeButton() {
+
+    }
 }
