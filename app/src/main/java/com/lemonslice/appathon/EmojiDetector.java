@@ -225,7 +225,7 @@ final public class EmojiDetector {
         feature_vals[2] = new rgb(102.402092f, 104.084221f, 163.292557f);
         feature_vals[3] = new rgb(92.549904f, 87.093628f, 152.024277f);
         feature_vals[4] = new rgb(76.390968f, 79.286438f, 130.261307f);
-        feature_vals[5] = new rgb(0.000000f, 0.000000f, 0.000000f);
+        feature_vals[5] = new rgb(20.000000f, 20.000000f, 20.000000f);
     }
 
     static rgb yuv_to_rgb(byte[] data, int width, int height, int x, int y)
@@ -242,7 +242,7 @@ final public class EmojiDetector {
 
         int Y = data[y*width + x] & 0xff;
 
-        data[y*width + x] = 0;
+        //data[y*width + x] = 0;
 
         // Get U and V values, stored after Y values, one per 2x2 block
         // of pixels, interleaved. Prepare them as floats with correct range
