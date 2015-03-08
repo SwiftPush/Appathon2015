@@ -40,7 +40,7 @@
         <!-- <Key android:codes="35,64" android:keyLabel="\# \@" /> !-->
     </Row>
     <Row>
-        <Key android:codes="-1" android:keyIcon="@drawable/e008" android:keyWidth="15%p" android:keyEdgeFlags="left"/>
+        <Key android:codes="-1" android:keyIcon="@drawable/screen_shot_2015_03_08_at_01" android:keyWidth="15%p" android:keyEdgeFlags="left"/>
         <Key android:codes="122" android:keyLabel="z"/>
         <Key android:codes="120" android:keyLabel="x"/>
         <Key android:codes="99" android:keyLabel="c"/>
