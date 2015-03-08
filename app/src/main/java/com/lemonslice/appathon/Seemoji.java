@@ -250,41 +250,41 @@ public class Seemoji extends InputMethodService
         };
         handler.postDelayed(runnable, 100);
 
-        final Button buttonSmile = (Button) outerLayout.findViewById(R.id.buttonSmile);
-        buttonSmile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cameraPreview.smileButton();
-            }
-        });
-        final Button buttonWink = (Button) outerLayout.findViewById(R.id.buttonWink);
-        buttonWink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cameraPreview.winkButton();
-            }
-        });
-        final Button buttonTounge = (Button) outerLayout.findViewById(R.id.buttonTounge);
-        buttonTounge.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cameraPreview.toungeButton();
-            }
-        });
-        final Button buttonMouth = (Button) outerLayout.findViewById(R.id.buttonMouth);
-        buttonMouth.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cameraPreview.mouthButton();
-            }
-        });
-        final Button buttonSun = (Button) outerLayout.findViewById(R.id.buttonSun);
-        buttonSun.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cameraPreview.sunButton();
-            }
-        });
+//        final Button buttonSmile = (Button) outerLayout.findViewById(R.id.buttonSmile);
+//        buttonSmile.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                cameraPreview.smileButton();
+//            }
+//        });
+//        final Button buttonWink = (Button) outerLayout.findViewById(R.id.buttonWink);
+//        buttonWink.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                cameraPreview.winkButton();
+//            }
+//        });
+//        final Button buttonTounge = (Button) outerLayout.findViewById(R.id.buttonTounge);
+//        buttonTounge.setOnClickListener( new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                cameraPreview.toungeButton();
+//            }
+//        });
+//        final Button buttonMouth = (Button) outerLayout.findViewById(R.id.buttonMouth);
+//        buttonMouth.setOnClickListener( new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                cameraPreview.mouthButton();
+//            }
+//        });
+//        final Button buttonSun = (Button) outerLayout.findViewById(R.id.buttonSun);
+//        buttonSun.setOnClickListener( new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                cameraPreview.sunButton();
+//            }
+//        });
 
         return containerView;
     }
