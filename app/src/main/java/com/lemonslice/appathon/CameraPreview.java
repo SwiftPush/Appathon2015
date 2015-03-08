@@ -26,7 +26,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     public Camera camera;
     private SurfaceHolder viewHolder;
     private MyFaceDetectionListener myFaceDetectionListener;
-    public String currEmoji = "";
+    public static String currEmoji = "";
     Camera.Parameters cameraParameters;
 
     static Rect faceDetected;
@@ -232,6 +232,5 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     public void setCurrEmoji(String newEmoji) {
         currEmoji = newEmoji;
-
     }
 }

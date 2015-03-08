@@ -22,31 +22,6 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/camera_overlay">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Aa"
-            android:id="@+id/backToKeyboardtxt"
-            android:layout_gravity="center_vertical|right|top"
-            android:clickable="true"
-            android:textStyle="bold"
-            android:textColor="#ffffffff" />
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/selectEmoji"
-            android:layout_gravity="center|top"
-            android:src="@drawable/tick" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Emoji"
-            android:id="@+id/emojiDisplayTxt"
-            android:layout_gravity="center_vertical|left|top"
-            android:textColor="#FFFFFF" />
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -54,7 +29,30 @@
             android:src="@drawable/delete_key"
             android:id="@+id/emoji_delete_key"
             android:contentDescription="Delete"
-            android:layout_gravity="center_horizontal|bottom|right" />
+            android:layout_gravity="center_horizontal|bottom|right"
+            android:background="@android:color/transparent"
+            android:layout_margin="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Emoji"
+            android:id="@+id/emojiDisplayTxt"
+            android:layout_gravity="center_horizontal|top"
+            android:textColor="#FFFFFF"
+            android:padding="0dp"
+            android:textSize="80dp"
+            android:layout_marginTop="-10dp" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/backToKeyBoardImg"
+            android:layout_gravity="left|bottom"
+            android:src="@mipmap/ic_launcher"
+            android:background="@android:color/transparent"
+            android:layout_margin="10dp" />
 
     </FrameLayout>
 </FrameLayout>
