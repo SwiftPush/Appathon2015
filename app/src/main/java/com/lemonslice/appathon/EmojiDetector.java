@@ -364,8 +364,6 @@ final public class EmojiDetector {
         mouthstarty += mouthextray / 2.f;
 
 
-
-
         Log.d("James", String.valueOf(width) + " " + String.valueOf(eye1startx) + " " + String.valueOf(eyereal));
 
 
