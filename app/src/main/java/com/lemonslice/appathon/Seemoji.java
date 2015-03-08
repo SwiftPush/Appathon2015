@@ -222,6 +222,7 @@ public class Seemoji extends InputMethodService
                             String codex;
                             codex = (String)chooseEmoji.getText();
                             ic.commitText(codex,1);
+                            chooseEmoji.setText("Emoji");
                         }
                     });
                 }
