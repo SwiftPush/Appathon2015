@@ -139,17 +139,19 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         if (cameraParameters.getPreviewFormat() == ImageFormat.NV21) {
             Camera.Size previewSize = cameraParameters.getPreviewSize();
 
+            YuvImage img = new YuvImage(data, ImageFormat.NV21, previewSize.width, previewSize.height, null);
+
+            EmojiDetector.emoji emo = EmojiDetector.get_emoji_from_image(img, previewSize.width, previewSize.height, faceDetected);
+
+            setCurrEmoji(emo.toString());
+
+            Log.d("DMoji", emo.toString());
+
             if(MainActivity.hello == 1) {
                 MainActivity.hello = 0;
 
                 if(bFace)
                 {
-                    YuvImage img = new YuvImage(data, ImageFormat.NV21, previewSize.width, previewSize.height, null);
-
-                    EmojiDetector.emoji emo = EmojiDetector.get_emoji_from_image(img, previewSize.width, previewSize.height, faceDetected);
-
-                    setCurrEmoji(emo.toString());
-
                     Log.d("James","Saving new face");
                     bFace = false;
                     ByteArrayOutputStream out = new ByteArrayOutputStream();
