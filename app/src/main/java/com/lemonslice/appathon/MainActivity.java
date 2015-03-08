@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.content.res.Resources;
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.*;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
@@ -15,7 +18,7 @@ public class MainActivity extends Activity {
     private CameraPreview cameraPreview;
     private ScrollView cameraLayout;
     private FrameLayout cameraContainer;
-
+    public String currEmoji = "sd";
     static int hello = 0;
 
     @Override
@@ -26,9 +29,38 @@ public class MainActivity extends Activity {
         camera = CameraPreview.openFrontCamera();
         cameraPreview = new CameraPreview(this, camera);
 
-        cameraLayout = (ScrollView) findViewById(R.id.camera_layout);
+        //cameraLayout = (ScrollView) findViewById(R.id.camera_layout);
         cameraContainer = (FrameLayout) findViewById(R.id.camera_container);
+        final TextView tv = (TextView) findViewById(R.id.yomoji);
+        tv.setText("\uD83D\uDE0E");
+        setCurrEmoji((String)tv.getText());
         cameraContainer.addView(cameraPreview);
+
+
+        ImageView u1 = (ImageView) findViewById(R.id.u1);
+        ImageView u2 = (ImageView) findViewById(R.id.u2);
+        ImageView u3 = (ImageView) findViewById(R.id.u3);
+
+        u1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("BTLE", "Send " + currEmoji + " to U1");
+            }
+        });
+
+        u2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("BTLE", "Send " + currEmoji + " to U2");
+            }
+        });
+
+        u3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("BTLE", "Send " + currEmoji + " to U3");
+            }
+        });
 
         // view tree observer lets us set the size of the camera preview view at runtime
         ViewTreeObserver viewTreeObserver = cameraPreview.getViewTreeObserver();
@@ -50,20 +82,31 @@ public class MainActivity extends Activity {
                     Log.d("EMOJI", String.format("ph: %s scale: %s", previewWidth, Float.toString(scale)));
 
                     ScrollView.LayoutParams slp = new ScrollView.LayoutParams((int) previewWidth, 500);
-                    FrameLayout.LayoutParams flp = new FrameLayout.LayoutParams((int) previewWidth, (int) (dpWidth * scale));
+                    FrameLayout.LayoutParams flp = new FrameLayout.LayoutParams((int) previewWidth, 500);
                     cameraPreview.setLayoutParams(flp);
-                    cameraLayout.setLayoutParams(slp);
-                    cameraLayout.scrollTo(0, (int) ((float)cameraLayout.getBottom()/1.5));
+                    //cameraLayout.setLayoutParams(slp);
+                    //cameraLayout.scrollTo(0, (int) ((float)cameraLayout.getBottom()/1.5));
 
                     cameraPreview.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             hello = 1;
+
                         }
                     });
                 }
             }
         });
+
+        final Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                tv.setText(Seemoji.stringToEmoji(CameraPreview.currEmoji));
+                handler.postDelayed(this, 100);
+            }
+        };
+        handler.postDelayed(runnable, 100);
     }
 
     @Override
@@ -86,5 +129,15 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public String getCurrEmoji() {
+
+        return currEmoji;
+    }
+
+    public void setCurrEmoji(String newEmoji) {
+        currEmoji = newEmoji;
+
     }
 }

@@ -228,6 +228,7 @@ public class Seemoji extends InputMethodService
                             InputConnection ic = getCurrentInputConnection();
                             String codex;
                             codex = (String)chooseEmoji.getText();
+                            codex = stringToEmoji(codex);
                             ic.commitText(codex,1);
                             //chooseEmoji.setText("Emoji");
                         }
@@ -243,7 +244,7 @@ public class Seemoji extends InputMethodService
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                chooseEmoji.setText(CameraPreview.currEmoji);
+                chooseEmoji.setText(stringToEmoji(CameraPreview.currEmoji));
                 handler.postDelayed(this, 100);
             }
         };
@@ -288,7 +289,7 @@ public class Seemoji extends InputMethodService
         return containerView;
     }
 
-    public String stringToEmoji(String inp) {
+    public static String stringToEmoji(String inp) {
         String codex = "";
         switch(inp) {
             case "E_SMILE" :
