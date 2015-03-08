@@ -161,6 +161,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
             Log.d("DMoji", emo.toString());
 
+            /* //DEBUGGING PRINT TO FILE
             if(bFace)
             {
                 bFace = false;
@@ -175,7 +176,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
                     File outputFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) , "/test.jpg");
 
-                    Log.d("James", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString());
                     FileOutputStream s = null;
                     try {
                         s = new FileOutputStream(outputFile);
@@ -190,6 +190,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                 }
 
             }
+            */
 
 
 //            YuvImage img = new YuvImage(data, ImageFormat.NV21, previewSize.width, previewSize.height, null);
@@ -203,14 +204,11 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
         @Override
         public void onFaceDetection(Camera.Face[] faces, Camera camera) {
-            Log.d("EMOJI", "onFaceDetection");
             if (faces.length > 0) {
-                Log.d("EMOJI", "" + faces.length + "Faces detected");
                 for (Camera.Face face : faces) {
 
-                    Log.d("EMOJI", "FACE FOUND AT:");
                     currEmoji = "\uD83D\uDE03";
-                    Log.d("EMOJI", String.format("l %d r %d top %d bottom %d", face.rect.left, face.rect.right, face.rect.top, face.rect.bottom));
+                    Log.d("EMOJI", String.format("FACE FOUND AT: l %d r %d top %d bottom %d", face.rect.left, face.rect.right, face.rect.top, face.rect.bottom));
 
                     faceDetected = face.rect;
                     bFace = true;
