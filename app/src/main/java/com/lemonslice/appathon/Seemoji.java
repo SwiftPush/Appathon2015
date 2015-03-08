@@ -277,6 +277,13 @@ public class Seemoji extends InputMethodService
                 cameraPreview.mouthButton();
             }
         });
+        final Button buttonSun = (Button) outerLayout.findViewById(R.id.buttonSun);
+        buttonSun.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cameraPreview.sunButton();
+            }
+        });
 
         return containerView;
     }
