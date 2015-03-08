@@ -26,15 +26,23 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     public Camera camera;
     private SurfaceHolder viewHolder;
     private MyFaceDetectionListener myFaceDetectionListener;
-    public String currEmoji = "";
+    public static String currEmoji = "";
     Camera.Parameters cameraParameters;
 
     static Rect faceDetected;
     static Boolean bFace;
 
+    static int width, height;
+    static byte[] yuv_dat;
+
     static{
         bFace = false;
         faceDetected = new Rect(0,0,0,0);
+
+        width = 0;
+        height = 0;
+
+        yuv_dat = null;
     }
 
     public CameraPreview(Context context, Camera camera) {
@@ -135,23 +143,33 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     public void onPreviewFrame(byte[] data, Camera camera) {
 
-
         if (cameraParameters.getPreviewFormat() == ImageFormat.NV21) {
+            Rect trect = new Rect(faceDetected);
+
             Camera.Size previewSize = cameraParameters.getPreviewSize();
 
-            if(MainActivity.hello == 1) {
-                MainActivity.hello = 0;
+            YuvImage img = new YuvImage(data, ImageFormat.NV21, previewSize.width, previewSize.height, null);
 
-                if(bFace)
-                {
-                    YuvImage img = new YuvImage(data, ImageFormat.NV21, previewSize.width, previewSize.height, null);
+            width = previewSize.width;
+            height = previewSize.height;
 
-                    EmojiDetector.emoji emo = EmojiDetector.get_emoji_from_image(img, previewSize.width, previewSize.height, faceDetected);
+            yuv_dat = img.getYuvData().clone();
 
-                    setCurrEmoji(emo.toString());
+            EmojiDetector.emoji emo = EmojiDetector.get_emoji_from_image(img, previewSize.width, previewSize.height, trect);
+
+            setCurrEmoji(emo.toString());
+
+            Log.d("DMoji", emo.toString());
+
+            if(bFace)
+            {
+                bFace = false;
+
+                if(MainActivity.hello == 1) {
+                    MainActivity.hello = 0;
 
                     Log.d("James","Saving new face");
-                    bFace = false;
+
                     ByteArrayOutputStream out = new ByteArrayOutputStream();
                     img.compressToJpeg(new Rect(0, 0, previewSize.width, previewSize.height), 80, out);
 
@@ -232,6 +250,67 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     public void setCurrEmoji(String newEmoji) {
         currEmoji = newEmoji;
+    }
 
+    static public void smileButton() {
+
+        if(!bFace)
+            return;
+
+        EmojiDetector.rgb feat1 = EmojiDetector.get_sum_val(yuv_dat, width, height, 0, faceDetected);
+        EmojiDetector.rgb feat2 = EmojiDetector.get_sum_val(yuv_dat, width, height, 1, faceDetected);
+
+        float r, g, b;
+
+        r = feat1.r + feat2.r;
+        g = feat1.g + feat2.g;
+        b = feat1.b + feat2.b;
+
+        r /= 2;
+        g /= 2;
+        b /= 2;
+
+        EmojiDetector.feature_vals[0] = new EmojiDetector.rgb(r, g, b);
+
+        Log.d("Boss2", String.valueOf(r) + " " + String.valueOf(g) + " " + String.valueOf(b));
+
+        Log.d("Boss3", "Smiled");
+    }
+
+    static public void winkButton() {
+
+        if(!bFace)
+            return;
+
+        EmojiDetector.rgb feat = EmojiDetector.get_sum_val(yuv_dat, width, height, 1, faceDetected);
+
+        EmojiDetector.feature_vals[1] = feat;
+
+        Log.d("Boss2", String.valueOf(feat.r) + " " + String.valueOf(feat.g) + " " + String.valueOf(feat.b));
+
+        Log.d("Boss3", "wink");
+    }
+
+    static public void toungeButton() {
+
+        if(!bFace)
+            return;
+
+        EmojiDetector.rgb feat = EmojiDetector.get_sum_val(yuv_dat, width, height, 2, faceDetected);
+
+        EmojiDetector.feature_vals[3] = feat;
+
+        Log.d("Boss3", "toungue");
+    }
+    static public void mouthButton() {
+
+        if(!bFace)
+            return;
+
+        EmojiDetector.rgb feat = EmojiDetector.get_sum_val(yuv_dat, width, height, 2, faceDetected);
+
+        EmojiDetector.feature_vals[2] = feat;
+
+        Log.d("Boss3", "mouth");
     }
 }

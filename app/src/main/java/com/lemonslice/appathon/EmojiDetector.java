@@ -285,6 +285,9 @@ final public class EmojiDetector {
             new bounding(MOUTH_BOX_X, MOUTH_BOX_Y, MOUTH_BOX_WIDTH, MOUTH_BOX_HEIGHT)
         };*/
 
+        if(data == null)
+            return new rgb(0);
+
         Rect lessretarded = new Rect(rect);
 
         Log.d("Facebits", "two " + String.valueOf(lessretarded.left) + " " + String.valueOf(lessretarded.top)
@@ -335,7 +338,7 @@ final public class EmojiDetector {
         float mouthstartx = mouthoffsetx * width;
         float mouthstarty = mouthoffsety * height;
 
-        float mouthwidth = eyesize * height * 2;
+        float mouthwidth = 0.1f * height * 2;
         float mouthheight = 0.3f * height;
 
         float eye1startx = eye1offsetx * width;
@@ -403,19 +406,20 @@ final public class EmojiDetector {
         sum.g /= num;
         sum.b /= num;
 
+
+
         return sum;
     }
 
-    static emoji get_emoji_from_image(YuvImage img, int width, int height, Rect rect)
+    static int[] get_feature_nums(byte[] data, int width, int height, Rect rect)
     {
-        byte[] data = img.getYuvData();
-
-
         int feature_nums[] = new int[FEATURES];
 
         for(int i=0; i<FEATURES; i++)
         {
             rgb feat = get_sum_val(data, width, height, i, rect);
+
+            Log.d("Bossm", "Feature num " + String.valueOf(i) + " " + String.valueOf(feat.r) + " " + String.valueOf(feat.g) + " " + String.valueOf(feat.b));
 
             //printf("%f %f %f\n", feat[0], feat[1], feat[2]);
 
@@ -460,6 +464,18 @@ final public class EmojiDetector {
 
             feature_nums[i] = minimum_num;
         }
+
+        return feature_nums;
+    }
+
+    static emoji get_emoji_from_image(YuvImage img, int width, int height, Rect rect)
+    {
+        byte[] data = img.getYuvData();
+
+        if(data == null)
+            return emoji.E_NONE;
+
+        int[] feature_nums = get_feature_nums(data, width, height, rect);
 
         emoji etype = map_emoji(feature_nums);
 
