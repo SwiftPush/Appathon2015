@@ -8,47 +8,64 @@
 
     <android.support.v7.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         card_view:cardElevation="10dp">
 
-        <LinearLayout
-            android:layout_width="fill_parent"
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="top">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:id = "@+id/u1"
-                android:src = "@drawable/alex"
-                android:gravity="left|top"
-                android:clickable="true"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp" />
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:id = "@+id/u2"
-                android:src = "@drawable/andy"
-                android:layout_weight="1"
-                android:gravity="top|center_horizontal"
-                android:clickable="true"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp" />
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:id = "@+id/u3"
-                android:layout_weight="1"
-                android:src = "@drawable/sam"
-                android:gravity="right|top"
-                android:clickable="true"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp" />
-        </LinearLayout>
+            android:id="@+id/scrollView" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="top">
+                <ImageView
+                    android:layout_width="125dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:id = "@+id/u1"
+                    android:src = "@drawable/alex"
+                    android:gravity="left|top"
+                    android:clickable="true"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp" />
+                <ImageView
+                    android:layout_width="125dp"
+                    android:layout_height="fill_parent"
+                    android:id = "@+id/u2"
+                    android:src = "@drawable/andy"
+                    android:layout_weight="1"
+                    android:gravity="top|center_horizontal"
+                    android:clickable="true"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp" />
+                <ImageView
+                    android:layout_width="125dp"
+                    android:layout_height="fill_parent"
+                    android:id = "@+id/u3"
+                    android:layout_weight="1"
+                    android:src = "@drawable/sam"
+                    android:gravity="right|top"
+                    android:clickable="true"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp" />
+
+                <ImageView
+                    android:layout_width="125dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:id="@+id/imageView"
+                    android:src="@drawable/alex"
+                    android:gravity="left|top"
+                    android:clickable="true"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp" />
+            </LinearLayout>
+        </HorizontalScrollView>
     </android.support.v7.widget.CardView>
 
 
@@ -61,16 +78,32 @@
         android:gravity="center_vertical|center_horizontal"
         android:textSize="80dp" />
 
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_margin="5dp"
+        card_view:cardElevation="10dp">
+
+
         <FrameLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_gravity="bottom"
-            android:id="@+id/camera_container">
-            </FrameLayout>
-    <FrameLayout
-        android:id="@+id/camera_overlay"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+            android:id="@+id/camera_container"
+            android:layout_margin="5dp">
         </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/camera_overlay"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_margin="5dp">
+        </FrameLayout>
+
+    </android.support.v7.widget.CardView>
+
+
 
 </LinearLayout>
