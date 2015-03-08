@@ -4,26 +4,27 @@
     android:layout_height="match_parent"
     android:background="#397AF2">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="SeeMoji"
-        android:id="@+id/textView"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:textSize="50dp"
-        android:textColor="#FFFFFF" />
-
     <ProgressBar
         style="@android:style/Widget.Material.ProgressBar.Large"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/progressBar"
-        android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true"
         android:progressBackgroundTint="#FFFFFF"
         android:progressTint="#FFFFFF"
         android:indeterminateTint="#FFFFFF"
-        android:indeterminateTintMode="src_in" />
+        android:indeterminateTintMode="src_in"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="220dp" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView2"
+        android:src="@drawable/name"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp" />
 </RelativeLayout>

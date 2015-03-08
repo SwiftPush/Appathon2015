@@ -225,10 +225,13 @@ public class Seemoji extends InputMethodService
                     final TextView chooseEmoji = (TextView) outerLayout.findViewById(R.id.emojiDisplayTxt);
                     chooseEmoji.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
+                            Log.d("James","Emoji clicked within keyboard");
                             InputConnection ic = getCurrentInputConnection();
                             String codex;
                             codex = (String)chooseEmoji.getText();
-                            codex = stringToEmoji(codex);
+                            Log.d("SAM1",codex);
+                            //codex = stringToEmoji(codex);
+                            Log.d("SAM2", codex);
                             ic.commitText(codex,1);
                             //chooseEmoji.setText("Emoji");
                         }
