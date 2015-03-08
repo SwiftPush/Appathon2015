@@ -6,6 +6,7 @@ import android.hardware.Camera;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
+import android.os.Handler;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -16,6 +17,7 @@ import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputConnection;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -28,15 +30,15 @@ public class Seemoji extends InputMethodService
 
     private KeyboardView kv;
     private Keyboard keyboard;
-    private CameraPreview cameraPreview;
-
+    private FrameLayout outerLayout;
+    private FrameLayout overLayout;
     private NoScrollView cameraLayout;
+    private CameraPreview cameraPreview;
 
     private FrameLayout containerView;
     private boolean isCameraMode = false;
     private boolean caps = false;
     private String prevCodex = "";
-    private FrameLayout outerLayout;
 
     @Override
     public void onKey(int primaryCode, int[] keyCodes) {
@@ -156,7 +158,9 @@ public class Seemoji extends InputMethodService
 
         cameraPreview = new CameraPreview(this, CameraPreview.openFrontCamera());
         outerLayout = (FrameLayout) layoutInflater.inflate(R.layout.camera_keyboard, null);
+
         cameraLayout = (NoScrollView) outerLayout.findViewById(R.id.camera_layout);
+        overLayout = (FrameLayout) outerLayout.findViewById(R.id.camera_overlay);
         FrameLayout cameraContainer = (FrameLayout) cameraLayout.findViewById(R.id.camera_container);
         cameraContainer.addView(cameraPreview);
 
@@ -164,6 +168,16 @@ public class Seemoji extends InputMethodService
         keyboard = new Keyboard(this, R.xml.qwerty);
         kv.setKeyboard(keyboard);
         kv.setOnKeyboardActionListener(this);
+
+        // set up the emoji delete button
+        ImageButton emojiDelete = (ImageButton) overLayout.findViewById(R.id.emoji_delete_key);
+        emojiDelete.setOnClickListener(new ImageButton.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onKey(Keyboard.KEYCODE_DELETE, null);
+            }
+        });
+
 
         ViewTreeObserver viewTreeObserver = cameraPreview.getViewTreeObserver();
         viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -188,12 +202,15 @@ public class Seemoji extends InputMethodService
                     final int px = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, targetDP, r.getDisplayMetrics());
                     Log.d("tsneirao", String.valueOf(px));
                     ScrollView.LayoutParams slp = new ScrollView.LayoutParams((int) previewWidth, px);
+                    FrameLayout.LayoutParams overlayoutParams = new FrameLayout.LayoutParams((int) previewWidth, px);
                     FrameLayout.LayoutParams flp = new FrameLayout.LayoutParams((int) previewWidth, (int) (dpWidth * scale));
                     cameraPreview.setLayoutParams(flp);
                     cameraLayout.setLayoutParams(slp);
-                    cameraLayout.scrollTo(0, cameraLayout.getBottom() / 2);
-                    final TextView button = (TextView) outerLayout.findViewById(R.id.backToKeyboardtxt);
-                    button.setOnClickListener(new View.OnClickListener() {
+                    overLayout.setLayoutParams(overlayoutParams);
+                    cameraLayout.scrollTo(0, (int) ((float)cameraLayout.getBottom()  / 1.5));
+
+                    final ImageButton imgButton = (ImageButton) outerLayout.findViewById(R.id.backToKeyBoardImg);
+                    imgButton.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
                             containerView.removeAllViews();
                             if (isCameraMode) {
@@ -204,16 +221,6 @@ public class Seemoji extends InputMethodService
                             isCameraMode = !isCameraMode;
                         }
                     });
-                    final ImageView selectButton = (ImageView) outerLayout.findViewById(R.id.selectEmoji);
-                    selectButton.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            InputConnection ic = getCurrentInputConnection();
-                            String codex;
-                            codex = stringToEmoji(cameraPreview.getCurrEmoji());
-                            TextView emojiDisplay = (TextView) outerLayout.findViewById(R.id.emojiDisplayTxt);
-                            emojiDisplay.setText(codex);
-                        }
-                    });
 
                     final TextView chooseEmoji = (TextView) outerLayout.findViewById(R.id.emojiDisplayTxt);
                     chooseEmoji.setOnClickListener(new View.OnClickListener() {
@@ -222,7 +229,7 @@ public class Seemoji extends InputMethodService
                             String codex;
                             codex = (String)chooseEmoji.getText();
                             ic.commitText(codex,1);
-                            chooseEmoji.setText("Emoji");
+                            //chooseEmoji.setText("Emoji");
                         }
                     });
                 }
@@ -230,6 +237,46 @@ public class Seemoji extends InputMethodService
         });
 
         containerView.addView(kv);
+
+        final Handler handler = new Handler();
+        final TextView chooseEmoji = (TextView) outerLayout.findViewById(R.id.emojiDisplayTxt);
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                chooseEmoji.setText(CameraPreview.currEmoji);
+                handler.postDelayed(this, 1000);
+            }
+        };
+        handler.postDelayed(runnable, 1000);
+
+        final Button buttonSmile = (Button) outerLayout.findViewById(R.id.buttonSmile);
+        buttonSmile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cameraPreview.smileButton();
+            }
+        });
+        final Button buttonWink = (Button) outerLayout.findViewById(R.id.buttonWink);
+        buttonWink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cameraPreview.winkButton();
+            }
+        });
+        final Button buttonTounge = (Button) outerLayout.findViewById(R.id.buttonTounge);
+        buttonTounge.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cameraPreview.toungeButton();
+            }
+        });
+        final Button buttonMouth = (Button) outerLayout.findViewById(R.id.buttonMouth);
+        buttonMouth.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cameraPreview.mouthButton();
+            }
+        });
 
         return containerView;
     }

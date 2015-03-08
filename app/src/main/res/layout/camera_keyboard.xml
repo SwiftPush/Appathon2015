@@ -22,22 +22,16 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/camera_overlay">
-        <TextView
+
+        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Aa"
-            android:id="@+id/backToKeyboardtxt"
-            android:layout_gravity="right|center_vertical"
-            android:clickable="true"
-            android:textStyle="bold"
-            android:textColor="#ffffffff" />
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/selectEmoji"
-            android:layout_gravity="center"
-            android:src="@drawable/tick" />
+            android:src="@drawable/delete_key_white"
+            android:id="@+id/emoji_delete_key"
+            android:contentDescription="Delete"
+            android:layout_gravity="center_horizontal|bottom|right"
+            android:background="@android:color/transparent"
+            android:layout_margin="10dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -45,7 +39,55 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Emoji"
             android:id="@+id/emojiDisplayTxt"
-            android:layout_gravity="left|center_vertical"
-            android:textColor="#FFFFFF" />
+            android:layout_gravity="center_horizontal|top"
+            android:textColor="#FFFFFF"
+            android:padding="0dp"
+            android:textSize="80dp"
+            android:layout_marginTop="-10dp" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/backToKeyBoardImg"
+            android:layout_gravity="left|bottom"
+            android:src="@mipmap/ic_launcher"
+            android:background="@android:color/transparent"
+            android:layout_margin="10dp" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical">
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tounge"
+                android:id="@+id/buttonTounge" />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wink"
+                android:id="@+id/buttonWink" />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Smile"
+                android:id="@+id/buttonSmile" />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mouth"
+                android:id="@+id/buttonMouth" />
+        </LinearLayout>
+
     </FrameLayout>
 </FrameLayout>

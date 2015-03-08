@@ -53,7 +53,7 @@
         <Key android:codes="63,33,58" android:keyLabel="\? ! :" android:keyEdgeFlags="right"/>!-->
     </Row>
     <Row android:rowEdgeFlags="bottom">
-        <Key android:codes="44" android:keyLabel="123" android:keyWidth="10%p"  android:keyEdgeFlags="left"/>
+        <Key android:codes="48,49,50,51,52,53,54,55,56,57" android:keyLabel="123" android:keyWidth="10%p"  android:popupCharacters="0123456789"  android:keyEdgeFlags="left"/>
         <Key android:codes="44" android:keyLabel="," android:keyWidth="5%p"/> <!-- This needs changing !-->
         <Key android:codes="32" android:keyLabel="SPACE" android:keyWidth="60%p" android:isRepeatable="true"/>
         <Key android:codes="47" android:keyLabel="." android:keyWidth="5%p" /> <!-- This needs changing !-->

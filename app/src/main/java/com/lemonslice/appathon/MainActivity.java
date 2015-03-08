@@ -53,7 +53,7 @@ public class MainActivity extends Activity {
                     FrameLayout.LayoutParams flp = new FrameLayout.LayoutParams((int) previewWidth, (int) (dpWidth * scale));
                     cameraPreview.setLayoutParams(flp);
                     cameraLayout.setLayoutParams(slp);
-                    cameraLayout.scrollTo(0, cameraLayout.getBottom()/2);
+                    cameraLayout.scrollTo(0, (int) ((float)cameraLayout.getBottom()/1.5));
 
                     cameraPreview.setOnClickListener(new View.OnClickListener() {
                         @Override
