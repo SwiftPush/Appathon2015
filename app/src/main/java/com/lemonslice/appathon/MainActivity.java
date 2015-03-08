@@ -7,6 +7,8 @@ import android.hardware.Camera;
 import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.*;
 import android.widget.FrameLayout;
@@ -74,14 +76,13 @@ public class MainActivity extends Activity {
         @Override
         public void onServiceFound(NsdServiceInfo serviceInfo) {
             String TAG = "NSD";
-            Log.d(TAG, "SERVICE FOUND BITCH: " + serviceInfo.toString());
-            Log.d(TAG, "Service discovery success : " + serviceInfo);
-            Log.d(TAG, "Host = " + serviceInfo.getServiceName());
 
             if (serviceInfo.getServiceName().equals(SERVICE_NAME)) {
                 Log.d(TAG, "lol found myself ;)");
             } else {
-                Log.d(TAG, "FOUND SOME OTHER FUCKER!!!!! :D");
+                Log.d(TAG, "SERVICE FOUND BITCH: " + serviceInfo.toString());
+                Log.d(TAG, "Service discovery success : " + serviceInfo);
+                Log.d(TAG, "Host = " + serviceInfo.getServiceName());
                 mNsdManager.resolveService(serviceInfo, resolveListener);
             }
 
@@ -110,6 +111,9 @@ public class MainActivity extends Activity {
         }
     };
 
+    ChatConnection chatConnection;
+    private Handler updateHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,6 +121,16 @@ public class MainActivity extends Activity {
         mNsdManager = (NsdManager) getSystemService(Context.NSD_SERVICE);
         registerService(9000);
         mNsdManager.discoverServices(SERVICE_TYPE, NsdManager.PROTOCOL_DNS_SD, discoveryListener);
+
+        updateHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                String emoji = msg.getData().getString("emoji");
+                Log.d("EMJ", "got emoji " + emoji);
+            }
+        };
+
+        chatConnection = new ChatConnection(updateHandler);
 
         setContentView(R.layout.activity_main);
 
