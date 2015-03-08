@@ -228,7 +228,9 @@ public class Seemoji extends InputMethodService
                             InputConnection ic = getCurrentInputConnection();
                             String codex;
                             codex = (String)chooseEmoji.getText();
-                            codex = stringToEmoji(codex);
+                            Log.d("SAM1",codex);
+                            //codex = stringToEmoji(codex);
+                            Log.d("SAM2", codex);
                             ic.commitText(codex,1);
                             //chooseEmoji.setText("Emoji");
                         }
