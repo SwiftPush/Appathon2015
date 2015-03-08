@@ -1,53 +1,57 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     tools:context=".MainActivity"
     android:orientation="vertical">
-    <FrameLayout
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:background="#FF6600"
-        android:layout_gravity="top">
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:text = "Seemoji"
-            android:textColor="#FFFFFF"
-            android:textSize="35dp"
-            android:gravity="center" />
-        </FrameLayout>
 
-    <LinearLayout
-        android:layout_width="fill_parent"
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="top">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:id = "@+id/u1"
-            android:src = "@drawable/alex"
-            android:gravity="left|top"
-            android:clickable="true" />
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:id = "@+id/u2"
-            android:src = "@drawable/andy"
-            android:layout_weight="1"
-            android:gravity="top|center_horizontal"
-            android:clickable="true" />
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:id = "@+id/u3"
-            android:layout_weight="1"
-            android:src = "@drawable/sam"
-            android:gravity="right|top"
-            android:clickable="true" />
+        android:layout_margin="5dp"
+        card_view:cardElevation="10dp">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="top">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:id = "@+id/u1"
+                android:src = "@drawable/alex"
+                android:gravity="left|top"
+                android:clickable="true"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:id = "@+id/u2"
+                android:src = "@drawable/andy"
+                android:layout_weight="1"
+                android:gravity="top|center_horizontal"
+                android:clickable="true"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:id = "@+id/u3"
+                android:layout_weight="1"
+                android:src = "@drawable/sam"
+                android:gravity="right|top"
+                android:clickable="true"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp" />
         </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -68,4 +72,5 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
         </FrameLayout>
+
 </LinearLayout>
