@@ -20,6 +20,8 @@ import android.widget.Toast;
 
 import java.net.InetAddress;
 import java.util.HashSet;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends Activity {
 
@@ -129,6 +131,7 @@ public class MainActivity extends Activity {
     private Handler updateHandler;
 
     LinearLayout connectionsLayout;
+    private boolean isConnected = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,8 +146,8 @@ public class MainActivity extends Activity {
             @Override
             public void handleMessage(Message msg) {
                 String emoji = msg.getData().getString("emoji");
-                receiveEmoji(emoji);
                 Log.d("NSD", "got emoji " + emoji);
+                receiveEmoji(emoji);
             }
         };
 
@@ -178,10 +181,12 @@ public class MainActivity extends Activity {
 
                 InetAddress addr = IPAddresses.iterator().next();
                 Log.d("CLICK", addr.toString());
-                chatConnection.connectToServer(addr, 9000);
                 TextView tv = (TextView) findViewById(R.id.yomoji);
-                String emoji = (String) tv.getText();
-                chatConnection.sendMessage(emoji);
+                final String emoji = (String) tv.getText();
+                Log.d("CLICK", "SENT MESSAGE WOOP");
+                chatConnection.sendMessage("THIS IS A TEST :D");
+//                    chatConnection.sendMessage(emoji);
+
             }
         };
 
@@ -229,12 +234,8 @@ public class MainActivity extends Activity {
         });
     }
 
-    public void clickUser(View v) {
-
-    }
-
     public void receiveEmoji(String text) {
-        Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "RECEIVED: " + text, Toast.LENGTH_LONG).show();
     }
 
     private void registerService(int port) {
@@ -249,13 +250,10 @@ public class MainActivity extends Activity {
     }
 
     public void updateConnections() {
-        /*
-        connectionsLayout.removeAllViews();
-        for (InetAddress port : IPAddresses) {
-            TextView text = new TextView(this);
-            text.setText(port.toString());
-            connectionsLayout.addView(text);
-        }*/
+        if (!isConnected) {
+            isConnected = true;
+            chatConnection.connectToServer(IPAddresses.iterator().next(), 9000);
+        }
     }
 
     @Override

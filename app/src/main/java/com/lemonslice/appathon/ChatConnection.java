@@ -138,10 +138,8 @@ public class ChatConnection {
             public void run() {
 
                 try {
-                    // Since discovery will happen via Nsd, we don't need to care which port is
-                    // used.  Just grab an available one  and advertise it via Nsd.
-                    mServerSocket = new ServerSocket(0);
-                    setLocalPort(mServerSocket.getLocalPort());
+                    mServerSocket = new ServerSocket(9000);
+                    setLocalPort(9000);
                     
                     while (!Thread.currentThread().isInterrupted()) {
                         Log.d(TAG, "ServerSocket Created, awaiting connection");
@@ -269,7 +267,7 @@ public class ChatConnection {
 
                 PrintWriter out = new PrintWriter(
                         new BufferedWriter(
-                                new OutputStreamWriter(getSocket().getOutputStream())), true);
+                                new OutputStreamWriter(socket.getOutputStream())), true);
                 out.println(msg);
                 out.flush();
                 updateMessages(msg, true);
