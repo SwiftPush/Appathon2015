@@ -75,13 +75,6 @@ public class ChatConnection {
     
 
     public synchronized void updateMessages(String msg, boolean local) {
-        Log.e(TAG, "Updating message: " + msg);
-
-        if (local) {
-            msg = "me: " + msg;
-        } else {
-            msg = "them: " + msg;
-        }
 
         Bundle messageBundle = new Bundle();
         messageBundle.putString("msg", msg);

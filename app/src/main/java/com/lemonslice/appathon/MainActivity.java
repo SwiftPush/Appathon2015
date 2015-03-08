@@ -145,7 +145,7 @@ public class MainActivity extends Activity {
         updateHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                String emoji = msg.getData().getString("emoji");
+                String emoji = msg.getData().getString("msg");
                 Log.d("NSD", "got emoji " + emoji);
                 receiveEmoji(emoji);
             }
@@ -184,8 +184,8 @@ public class MainActivity extends Activity {
                 TextView tv = (TextView) findViewById(R.id.yomoji);
                 final String emoji = (String) tv.getText();
                 Log.d("CLICK", "SENT MESSAGE WOOP");
-                chatConnection.sendMessage("THIS IS A TEST :D");
-//                    chatConnection.sendMessage(emoji);
+//                chatConnection.sendMessage("THIS IS A TEST :D");
+                chatConnection.sendMessage(addr.toString() + "," + emoji);
 
             }
         };
@@ -194,8 +194,6 @@ public class MainActivity extends Activity {
         u2.setOnClickListener(startConnection);
         u3.setOnClickListener(startConnection);
         u4.setOnClickListener(startConnection);
-
-
 
         // view tree observer lets us set the size of the camera preview view at runtime
         ViewTreeObserver viewTreeObserver = cameraPreview.getViewTreeObserver();
@@ -235,7 +233,13 @@ public class MainActivity extends Activity {
     }
 
     public void receiveEmoji(String text) {
-        Toast.makeText(this, "RECEIVED: " + text, Toast.LENGTH_LONG).show();
+
+        String[] split = text.split(",");
+        if (split[0].equals(IPAddresses.iterator().next().toString())) {
+            Log.d("CLICK", "IGNORING THING SENT FROM ME");
+            return;
+        }
+        Toast.makeText(this, "RECEIVED: " + split[1], Toast.LENGTH_LONG).show();
     }
 
     private void registerService(int port) {
