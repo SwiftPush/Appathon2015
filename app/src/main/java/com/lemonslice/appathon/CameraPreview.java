@@ -32,6 +32,11 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     static Rect faceDetected;
     static Boolean bFace;
 
+    static{
+        bFace = false;
+        faceDetected = new Rect(0,0,0,0);
+    }
+
     public CameraPreview(Context context, Camera camera) {
         super(context);
         this.camera = camera;
@@ -39,8 +44,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         viewHolder.addCallback(this);
         camera.setPreviewCallback(this);
         myFaceDetectionListener = new MyFaceDetectionListener();
-
-        faceDetected = new Rect();
     }
 
     @Override
@@ -131,18 +134,22 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     }
 
     public void onPreviewFrame(byte[] data, Camera camera) {
+
+
         if (cameraParameters.getPreviewFormat() == ImageFormat.NV21) {
             Camera.Size previewSize = cameraParameters.getPreviewSize();
-
-            YuvImage img = new YuvImage(data, ImageFormat.NV21, previewSize.width, previewSize.height, null);
-
-            EmojiDetector.get_emoji_from_image(img, previewSize.width, previewSize.height);
 
             if(MainActivity.hello == 1) {
                 MainActivity.hello = 0;
 
                 if(bFace)
                 {
+                    YuvImage img = new YuvImage(data, ImageFormat.NV21, previewSize.width, previewSize.height, null);
+
+                    EmojiDetector.emoji emo = EmojiDetector.get_emoji_from_image(img, previewSize.width, previewSize.height, faceDetected);
+
+                    setCurrEmoji(emo.toString());
+
                     Log.d("James","Saving new face");
                     bFace = false;
                     ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -166,10 +173,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
             }
 
-            EmojiDetector.emoji xxx = EmojiDetector.get_emoji_from_image(img, previewSize.width, previewSize.height);
-//            Log.d("Sam", xxx.toString());
-//
-            setCurrEmoji(xxx.toString());
 
 //            YuvImage img = new YuvImage(data, ImageFormat.NV21, previewSize.width, previewSize.height, null);
 //            byte[] yuvData = img.getYuvData();

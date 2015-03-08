@@ -2,6 +2,8 @@ package com.lemonslice.appathon;
 
 import android.graphics.YuvImage;
 import android.util.Log;
+import android.graphics.Rect;
+
 
 /**
  * Created by jamesburnside on 07/03/15.
@@ -62,14 +64,16 @@ final public class EmojiDetector {
             this.width = width;
             this.height = height;
         }
+
+        bounding(float x, float y, float width, float height)
+        {
+            this.x = (int)x;
+            this.y = (int)y;
+            this.width = (int)width;
+            this.height = (int)height;
+        }
     }
 
-    static bounding boundings[] =
-    {
-        new bounding(EYE_BOX_LEFT_X, EYE_BOX_Y, EYE_BOX_WIDTH, EYE_BOX_HEIGHT),
-        new bounding(EYE_BOX_RIGHT_X, EYE_BOX_Y, EYE_BOX_WIDTH, EYE_BOX_HEIGHT),
-        new bounding(MOUTH_BOX_X, MOUTH_BOX_Y, MOUTH_BOX_WIDTH, MOUTH_BOX_HEIGHT)
-    };
 
     static String images[] =
     {
@@ -226,10 +230,15 @@ final public class EmojiDetector {
 
     static rgb yuv_to_rgb(byte[] data, int width, int height, int x, int y)
     {
-        // TODO: Likely bug here
-        if(y*width + x >= data.length)
+        /// pixel values and widths are hardcoded, this is terribad
+        if(y >= height || x >= width)
             return new rgb(0);
 
+        if(x < 0 || y < 0)
+            return new rgb(0);
+
+        if(y*width + x >= data.length)
+            return new rgb(0);
 
         int Y = data[y*width + x] & 0xff;
 
@@ -242,8 +251,7 @@ final public class EmojiDetector {
         int yby2 = y/2;
 
         // make this V for NV12/420SP
-
-        // TODO: Likely bug here
+        // pixel values hardcoded
         if(width*height + 2*xby2 + 1 + yby2*width >= data.length)
             return new rgb(0);
 
@@ -268,8 +276,106 @@ final public class EmojiDetector {
         return val;
     }
 
-    static rgb get_sum_val(byte[] data, int width, int height, int type)
+    static rgb get_sum_val(byte[] data, int width, int height, int type, Rect rect)
     {
+        /*bounding boundings[] =
+        {
+            new bounding(EYE_BOX_LEFT_X, EYE_BOX_Y, EYE_BOX_WIDTH, EYE_BOX_HEIGHT),
+            new bounding(EYE_BOX_RIGHT_X, EYE_BOX_Y, EYE_BOX_WIDTH, EYE_BOX_HEIGHT),
+            new bounding(MOUTH_BOX_X, MOUTH_BOX_Y, MOUTH_BOX_WIDTH, MOUTH_BOX_HEIGHT)
+        };*/
+
+        Rect lessretarded = new Rect(rect);
+
+        Log.d("Facebits", "two " + String.valueOf(lessretarded.left) + " " + String.valueOf(lessretarded.top)
+                + " " + String.valueOf(lessretarded.right) + " " + String.valueOf(lessretarded.bottom));
+
+        float pl, pr, pt, pb;
+
+        pl = lessretarded.left;
+        pr = lessretarded.right;
+        pt = lessretarded.top;
+        pb = lessretarded.bottom;
+
+        pl += 1000.f;
+        pl /= 2000.f;
+
+        pr += 1000.f;
+        pr /= 2000.f;
+
+        pt += 1000.f;
+        pt /= 2000.f;
+
+        pb += 1000.f;
+        pb /= 2000.f;
+
+        pb *= height;
+        pr *= width;
+
+        pl *= width;
+        pt *= height;
+
+        Log.d("Facebits", String.valueOf(pl) + " " + String.valueOf(pt)
+                + " " + String.valueOf(pr) + " " + String.valueOf(pb));
+
+        ///percentages
+        float eyesize = 0.1f;
+        float mouthWidth = 0.1f;
+        float mouthHeight = 0.2f;
+
+        float eye1offsety = 0.1f;
+        float eye2offsety = eye1offsety + eyesize + 0.1f;
+
+        float eye1offsetx = 0.8f;
+        float eye2offsetx = eye1offsetx;
+
+        float mouthoffsetx = 0.7f;
+        float mouthoffsety = eye1offsety + eyesize/2.f;
+
+        float mouthstartx = mouthoffsetx * width;
+        float mouthstarty = mouthoffsety * height;
+
+        float mouthwidth = eyesize * height * 2;
+        float mouthheight = 0.3f * height;
+
+        float eye1startx = eye1offsetx * width;
+        float eye2startx = eye2offsetx * width;
+
+        float eye1starty = eye1offsety * height;
+        float eye2starty = eye2offsety * height;
+
+        float eyereal = eyesize * width;
+
+
+
+        eye1starty = pt + 0.1f * (pl - pt);
+        eye2starty = pb - eyereal + 0.1f * (pt - pl);
+
+        eye1startx = (pr + pl)/2;
+        eye2startx = (pr + pl)/2;
+
+        mouthstartx = pl;
+        mouthstarty = pt;
+
+        float mouthendy = mouthstarty + mouthheight;
+
+        float mouthextray = pb - mouthendy;
+
+        mouthstarty += mouthextray / 2.f;
+
+
+
+
+        Log.d("James", String.valueOf(width) + " " + String.valueOf(eye1startx) + " " + String.valueOf(eyereal));
+
+
+        bounding boundings[] =
+        {
+                new bounding(eye1startx, eye1starty, eyereal, eyereal),
+                new bounding(eye2startx, eye2starty, eyereal, eyereal),
+                new bounding(mouthstartx, mouthstarty, mouthwidth, mouthheight)
+        };
+
         rgb sum = new rgb(0);
         int num = 0;
 
@@ -302,7 +408,7 @@ final public class EmojiDetector {
         return sum;
     }
 
-    static emoji get_emoji_from_image(YuvImage img, int width, int height)
+    static emoji get_emoji_from_image(YuvImage img, int width, int height, Rect rect)
     {
         byte[] data = img.getYuvData();
 
@@ -311,7 +417,7 @@ final public class EmojiDetector {
 
         for(int i=0; i<FEATURES; i++)
         {
-            rgb feat = get_sum_val(data, width, height, i);
+            rgb feat = get_sum_val(data, width, height, i, rect);
 
             //printf("%f %f %f\n", feat[0], feat[1], feat[2]);
 
@@ -347,7 +453,8 @@ final public class EmojiDetector {
                 }
             }
 
-            assert(minimum_num != -1);
+            if(minimum_num == -1)
+                Log.d("James", "uh ohhhh");
 
             //printf("Feature %i classified as image %s\n", i, images[inverse_feature_vals[minimum_num]].c_str());
 
@@ -358,7 +465,7 @@ final public class EmojiDetector {
 
         emoji etype = map_emoji(feature_nums);
 
-        Log.d("Testicles", etype.toString());
+        Log.d("Test", etype.toString());
 
         return etype;
     }
