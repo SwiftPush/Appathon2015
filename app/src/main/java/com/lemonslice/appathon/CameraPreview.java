@@ -32,9 +32,17 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     static Rect faceDetected;
     static Boolean bFace;
 
+    static int width, height;
+    static byte[] yuv_dat;
+
     static{
         bFace = false;
         faceDetected = new Rect(0,0,0,0);
+
+        width = 0;
+        height = 0;
+
+        yuv_dat = null;
     }
 
     public CameraPreview(Context context, Camera camera) {
@@ -142,6 +150,11 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             {
                 YuvImage img = new YuvImage(data, ImageFormat.NV21, previewSize.width, previewSize.height, null);
 
+                width = previewSize.width;
+                height = previewSize.height;
+
+                yuv_dat = img.getYuvData().clone();
+
                 EmojiDetector.emoji emo = EmojiDetector.get_emoji_from_image(img, previewSize.width, previewSize.height, faceDetected);
 
                 setCurrEmoji(emo.toString());
@@ -237,18 +250,47 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         currEmoji = newEmoji;
     }
 
-    public void smileButton() {
+    static public void smileButton() {
 
+        if(!bFace)
+            return;
+
+        EmojiDetector.rgb feat = EmojiDetector.get_sum_val(yuv_dat, width, height, 0, faceDetected);
+
+        EmojiDetector.feature_vals[0] = feat;
+
+        Log.d("Boss2", String.valueOf(feat.r) + " " + String.valueOf(feat.g) + " " + String.valueOf(feat.b));
     }
 
-    public void winkButton() {
+    static public void winkButton() {
 
+        if(!bFace)
+            return;
+
+        EmojiDetector.rgb feat = EmojiDetector.get_sum_val(yuv_dat, width, height, 1, faceDetected);
+
+        EmojiDetector.feature_vals[1] = feat;
+
+        Log.d("Boss2", String.valueOf(feat.r) + " " + String.valueOf(feat.g) + " " + String.valueOf(feat.b));
     }
 
-    public void toungeButton() {
+    static public void toungeButton() {
 
+        if(!bFace)
+            return;
+
+
+        EmojiDetector.rgb feat = EmojiDetector.get_sum_val(yuv_dat, width, height, 2, faceDetected);
+
+        EmojiDetector.feature_vals[3] = feat;
     }
-    public void mouthButton() {
+    static public void mouthButton() {
 
+        if(!bFace)
+            return;
+
+        EmojiDetector.rgb feat = EmojiDetector.get_sum_val(yuv_dat, width, height, 2, faceDetected);
+
+        EmojiDetector.feature_vals[2] = feat;
     }
 }
