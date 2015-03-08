@@ -335,7 +335,7 @@ final public class EmojiDetector {
         float mouthstartx = mouthoffsetx * width;
         float mouthstarty = mouthoffsety * height;
 
-        float mouthwidth = eyesize * height;
+        float mouthwidth = eyesize * height * 2;
         float mouthheight = 0.3f * height;
 
         float eye1startx = eye1offsetx * width;
@@ -348,8 +348,8 @@ final public class EmojiDetector {
 
 
 
-        eye1starty = pt;
-        eye2starty = pb - eyereal;
+        eye1starty = pt + 0.1f * (pl - pt);
+        eye2starty = pb - eyereal + 0.1f * (pt - pl);
 
         eye1startx = (pr + pl)/2;
         eye2startx = (pr + pl)/2;
