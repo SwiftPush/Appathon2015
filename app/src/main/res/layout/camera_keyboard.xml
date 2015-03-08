@@ -38,5 +38,14 @@
             android:id="@+id/selectEmoji"
             android:layout_gravity="center"
             android:src="@drawable/tick" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Emoji"
+            android:id="@+id/emojiDisplayTxt"
+            android:layout_gravity="left|center_vertical"
+            android:textColor="#FFFFFF" />
     </FrameLayout>
 </FrameLayout>
