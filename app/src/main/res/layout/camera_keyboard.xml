@@ -26,7 +26,7 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/delete_key"
+            android:src="@drawable/delete_key_white"
             android:id="@+id/emoji_delete_key"
             android:contentDescription="Delete"
             android:layout_gravity="center_horizontal|bottom|right"
