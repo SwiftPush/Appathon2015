@@ -147,7 +147,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                     YuvImage img = new YuvImage(data, ImageFormat.NV21, previewSize.width, previewSize.height, null);
 
                     EmojiDetector.emoji emo = EmojiDetector.get_emoji_from_image(img, previewSize.width, previewSize.height, faceDetected);
-
+                    Log.d("SAM", emo.toString());
                     setCurrEmoji(emo.toString());
 
                     Log.d("James","Saving new face");
