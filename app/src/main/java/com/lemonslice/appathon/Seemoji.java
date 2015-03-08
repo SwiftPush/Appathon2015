@@ -35,6 +35,7 @@ public class Seemoji extends InputMethodService
     private FrameLayout containerView;
     private boolean isCameraMode = false;
     private boolean caps = false;
+    private String prevCodex = "";
     private FrameLayout outerLayout;
 
     @Override
@@ -209,7 +210,17 @@ public class Seemoji extends InputMethodService
                             InputConnection ic = getCurrentInputConnection();
                             String codex;
                             codex = stringToEmoji(cameraPreview.getCurrEmoji());
+                            TextView emojiDisplay = (TextView) outerLayout.findViewById(R.id.emojiDisplayTxt);
+                            emojiDisplay.setText(codex);
+                        }
+                    });
 
+                    final TextView chooseEmoji = (TextView) outerLayout.findViewById(R.id.emojiDisplayTxt);
+                    chooseEmoji.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            InputConnection ic = getCurrentInputConnection();
+                            String codex;
+                            codex = (String)chooseEmoji.getText();
                             ic.commitText(codex,1);
                         }
                     });
