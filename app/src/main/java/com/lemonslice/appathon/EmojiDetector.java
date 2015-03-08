@@ -290,8 +290,8 @@ final public class EmojiDetector {
 
         Rect lessretarded = new Rect(rect);
 
-        Log.d("Facebits", "two " + String.valueOf(lessretarded.left) + " " + String.valueOf(lessretarded.top)
-                + " " + String.valueOf(lessretarded.right) + " " + String.valueOf(lessretarded.bottom));
+//        Log.d("Facebits", "two " + String.valueOf(lessretarded.left) + " " + String.valueOf(lessretarded.top)
+//                + " " + String.valueOf(lessretarded.right) + " " + String.valueOf(lessretarded.bottom));
 
         float pl, pr, pt, pb;
 
@@ -318,8 +318,8 @@ final public class EmojiDetector {
         pl *= width;
         pt *= height;
 
-        Log.d("Facebits", String.valueOf(pl) + " " + String.valueOf(pt)
-                + " " + String.valueOf(pr) + " " + String.valueOf(pb));
+//        Log.d("Facebits", String.valueOf(pl) + " " + String.valueOf(pt)
+//                + " " + String.valueOf(pr) + " " + String.valueOf(pb));
 
         ///percentages
         float eyesize = 0.1f;
@@ -367,7 +367,7 @@ final public class EmojiDetector {
         mouthstarty += mouthextray / 2.f;
 
 
-        Log.d("James", String.valueOf(width) + " " + String.valueOf(eye1startx) + " " + String.valueOf(eyereal));
+//        Log.d("James", String.valueOf(width) + " " + String.valueOf(eye1startx) + " " + String.valueOf(eyereal));
 
 
         bounding boundings[] =
@@ -419,7 +419,7 @@ final public class EmojiDetector {
         {
             rgb feat = get_sum_val(data, width, height, i, rect);
 
-            Log.d("Bossm", "Feature num " + String.valueOf(i) + " " + String.valueOf(feat.r) + " " + String.valueOf(feat.g) + " " + String.valueOf(feat.b));
+//            Log.d("Bossm", "Feature num " + String.valueOf(i) + " " + String.valueOf(feat.r) + " " + String.valueOf(feat.g) + " " + String.valueOf(feat.b));
 
             //printf("%f %f %f\n", feat[0], feat[1], feat[2]);
 
@@ -479,7 +479,7 @@ final public class EmojiDetector {
 
         emoji etype = map_emoji(feature_nums);
 
-        Log.d("Test", etype.toString());
+//        Log.d("Test", etype.toString());
 
         return etype;
     }

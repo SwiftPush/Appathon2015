@@ -13,10 +13,13 @@ import android.util.Log;
 import android.view.*;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.net.InetAddress;
+import java.util.HashSet;
 
 public class MainActivity extends Activity {
 
@@ -30,6 +33,8 @@ public class MainActivity extends Activity {
     private String SERVICE_NAME = "Yomoji";
     private String SERVICE_TYPE = "_http._tcp";
     private NsdManager mNsdManager;
+
+    HashSet<InetAddress> IPAddresses;
 
     NsdManager.RegistrationListener registrationListener = new NsdManager.RegistrationListener() {
         @Override
@@ -109,6 +114,13 @@ public class MainActivity extends Activity {
             InetAddress hostAddress = serviceInfo.getHost();
             int hostPort = serviceInfo.getPort();
 
+            IPAddresses.add(hostAddress);
+            MainActivity.this.runOnUiThread(new Runnable() {
+                public void run() {
+                    updateConnections();
+                }
+            });
+
             Log.d("NSD", "addr: " + hostAddress.toString() + " port: " + hostPort);
         }
     };
@@ -116,9 +128,12 @@ public class MainActivity extends Activity {
     ChatConnection chatConnection;
     private Handler updateHandler;
 
+    LinearLayout connectionsLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        IPAddresses = new HashSet<>();
 
         mNsdManager = (NsdManager) getSystemService(Context.NSD_SERVICE);
         registerService(9000);
@@ -128,7 +143,8 @@ public class MainActivity extends Activity {
             @Override
             public void handleMessage(Message msg) {
                 String emoji = msg.getData().getString("emoji");
-                Log.d("EMJ", "got emoji " + emoji);
+                receiveEmoji(emoji);
+                Log.d("NSD", "got emoji " + emoji);
             }
         };
 
@@ -146,31 +162,35 @@ public class MainActivity extends Activity {
         setCurrEmoji((String)tv.getText());
         cameraContainer.addView(cameraPreview);
 
+        connectionsLayout = (LinearLayout) findViewById(R.id.connection_bar);
 
         ImageView u1 = (ImageView) findViewById(R.id.u1);
         ImageView u2 = (ImageView) findViewById(R.id.u2);
         ImageView u3 = (ImageView) findViewById(R.id.u3);
+        ImageView u4 = (ImageView) findViewById(R.id.u4);
 
-        u1.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener startConnection = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("BTLE", "Send " + currEmoji + " to U1");
-            }
-        });
+                Log.d("CLICK", "OH HEYYYY");
+                if (chatConnection == null || IPAddresses == null || IPAddresses.size() == 0)
+                    return;
 
-        u2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("BTLE", "Send " + currEmoji + " to U2");
+                InetAddress addr = IPAddresses.iterator().next();
+                Log.d("CLICK", addr.toString());
+                chatConnection.connectToServer(addr, 9000);
+                TextView tv = (TextView) findViewById(R.id.yomoji);
+                String emoji = (String) tv.getText();
+                chatConnection.sendMessage(emoji);
             }
-        });
+        };
 
-        u3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("BTLE", "Send " + currEmoji + " to U3");
-            }
-        });
+        u1.setOnClickListener(startConnection);
+        u2.setOnClickListener(startConnection);
+        u3.setOnClickListener(startConnection);
+        u4.setOnClickListener(startConnection);
+
+
 
         // view tree observer lets us set the size of the camera preview view at runtime
         ViewTreeObserver viewTreeObserver = cameraPreview.getViewTreeObserver();
@@ -209,6 +229,14 @@ public class MainActivity extends Activity {
         });
     }
 
+    public void clickUser(View v) {
+
+    }
+
+    public void receiveEmoji(String text) {
+        Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+    }
+
     private void registerService(int port) {
         NsdServiceInfo serviceInfo = new NsdServiceInfo();
         serviceInfo.setServiceName(SERVICE_NAME);
@@ -218,6 +246,16 @@ public class MainActivity extends Activity {
         mNsdManager.registerService(serviceInfo,
                 NsdManager.PROTOCOL_DNS_SD,
                 registrationListener);
+    }
+
+    public void updateConnections() {
+        /*
+        connectionsLayout.removeAllViews();
+        for (InetAddress port : IPAddresses) {
+            TextView text = new TextView(this);
+            text.setText(port.toString());
+            connectionsLayout.addView(text);
+        }*/
     }
 
     @Override

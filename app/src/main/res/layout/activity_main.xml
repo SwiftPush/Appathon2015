@@ -22,7 +22,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_gravity="top">
+                android:layout_gravity="top"
+                android:id="@+id/connection_bar">
                 <ImageView
                     android:layout_width="125dp"
                     android:layout_height="fill_parent"
@@ -58,7 +59,7 @@
                     android:layout_width="125dp"
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
-                    android:id="@+id/imageView"
+                    android:id="@+id/u4"
                     android:src="@drawable/alex"
                     android:gravity="left|top"
                     android:clickable="true"

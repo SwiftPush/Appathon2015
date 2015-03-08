@@ -196,7 +196,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 //            byte[] yuvData = img.getYuvData();
         }
 
-        Log.d("Testicles", "on preview frame");
+//        Log.d("Testicles", "on preview frame");
     }
 
     public class MyFaceDetectionListener implements Camera.FaceDetectionListener {
