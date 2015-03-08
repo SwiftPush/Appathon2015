@@ -173,10 +173,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
             }
 
-//            EmojiDetector.emoji xxx = EmojiDetector.get_emoji_from_image(img, previewSize.width, previewSize.height);
-//            Log.d("Sam", xxx.toString());
-//
-//
 
 //            YuvImage img = new YuvImage(data, ImageFormat.NV21, previewSize.width, previewSize.height, null);
 //            byte[] yuvData = img.getYuvData();
