@@ -244,10 +244,10 @@ public class Seemoji extends InputMethodService
             @Override
             public void run() {
                 chooseEmoji.setText(CameraPreview.currEmoji);
-                handler.postDelayed(this, 1000);
+                handler.postDelayed(this, 100);
             }
         };
-        handler.postDelayed(runnable, 1000);
+        handler.postDelayed(runnable, 100);
 
         final Button buttonSmile = (Button) outerLayout.findViewById(R.id.buttonSmile);
         buttonSmile.setOnClickListener(new View.OnClickListener() {
@@ -285,8 +285,8 @@ public class Seemoji extends InputMethodService
         String codex = "";
         switch(inp) {
             case "E_SMILE" :
-                codex = "\uD83D\uDE03";
-                break;
+            codex = "\uD83D\uDE03";
+            break;
             case "E_SUPER_SMILE" :
                 codex = "\uD83D\uDE04";
                 break;

@@ -338,7 +338,7 @@ final public class EmojiDetector {
         float mouthstartx = mouthoffsetx * width;
         float mouthstarty = mouthoffsety * height;
 
-        float mouthwidth = eyesize * height * 2;
+        float mouthwidth = 0.1f * height * 2;
         float mouthheight = 0.3f * height;
 
         float eye1startx = eye1offsetx * width;
@@ -419,7 +419,7 @@ final public class EmojiDetector {
         {
             rgb feat = get_sum_val(data, width, height, i, rect);
 
-            Log.d("Boss", "Feature num " + String.valueOf(i) + " " + String.valueOf(feat.r) + " " + String.valueOf(feat.g) + " " + String.valueOf(feat.b));
+            Log.d("Bossm", "Feature num " + String.valueOf(i) + " " + String.valueOf(feat.r) + " " + String.valueOf(feat.g) + " " + String.valueOf(feat.b));
 
             //printf("%f %f %f\n", feat[0], feat[1], feat[2]);
 

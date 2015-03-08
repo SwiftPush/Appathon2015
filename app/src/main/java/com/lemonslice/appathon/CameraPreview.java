@@ -144,23 +144,25 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     public void onPreviewFrame(byte[] data, Camera camera) {
 
         if (cameraParameters.getPreviewFormat() == ImageFormat.NV21) {
+            Rect trect = new Rect(faceDetected);
+
             Camera.Size previewSize = cameraParameters.getPreviewSize();
+
+            YuvImage img = new YuvImage(data, ImageFormat.NV21, previewSize.width, previewSize.height, null);
+
+            width = previewSize.width;
+            height = previewSize.height;
+
+            yuv_dat = img.getYuvData().clone();
+
+            EmojiDetector.emoji emo = EmojiDetector.get_emoji_from_image(img, previewSize.width, previewSize.height, trect);
+
+            setCurrEmoji(emo.toString());
+
+            Log.d("DMoji", emo.toString());
 
             if(bFace)
             {
-                YuvImage img = new YuvImage(data, ImageFormat.NV21, previewSize.width, previewSize.height, null);
-
-                width = previewSize.width;
-                height = previewSize.height;
-
-                yuv_dat = img.getYuvData().clone();
-
-                EmojiDetector.emoji emo = EmojiDetector.get_emoji_from_image(img, previewSize.width, previewSize.height, faceDetected);
-
-                setCurrEmoji(emo.toString());
-
-                Log.d("DMoji", emo.toString());
-
                 bFace = false;
 
                 if(MainActivity.hello == 1) {
@@ -255,11 +257,24 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         if(!bFace)
             return;
 
-        EmojiDetector.rgb feat = EmojiDetector.get_sum_val(yuv_dat, width, height, 0, faceDetected);
+        EmojiDetector.rgb feat1 = EmojiDetector.get_sum_val(yuv_dat, width, height, 0, faceDetected);
+        EmojiDetector.rgb feat2 = EmojiDetector.get_sum_val(yuv_dat, width, height, 1, faceDetected);
 
-        EmojiDetector.feature_vals[0] = feat;
+        float r, g, b;
 
-        Log.d("Boss2", String.valueOf(feat.r) + " " + String.valueOf(feat.g) + " " + String.valueOf(feat.b));
+        r = feat1.r + feat2.r;
+        g = feat1.g + feat2.g;
+        b = feat1.b + feat2.b;
+
+        r /= 2;
+        g /= 2;
+        b /= 2;
+
+        EmojiDetector.feature_vals[0] = new EmojiDetector.rgb(r, g, b);
+
+        Log.d("Boss2", String.valueOf(r) + " " + String.valueOf(g) + " " + String.valueOf(b));
+
+        Log.d("Boss3", "Smiled");
     }
 
     static public void winkButton() {
@@ -272,6 +287,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         EmojiDetector.feature_vals[1] = feat;
 
         Log.d("Boss2", String.valueOf(feat.r) + " " + String.valueOf(feat.g) + " " + String.valueOf(feat.b));
+
+        Log.d("Boss3", "wink");
     }
 
     static public void toungeButton() {
@@ -279,10 +296,11 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         if(!bFace)
             return;
 
-
         EmojiDetector.rgb feat = EmojiDetector.get_sum_val(yuv_dat, width, height, 2, faceDetected);
 
         EmojiDetector.feature_vals[3] = feat;
+
+        Log.d("Boss3", "toungue");
     }
     static public void mouthButton() {
 
@@ -292,5 +310,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         EmojiDetector.rgb feat = EmojiDetector.get_sum_val(yuv_dat, width, height, 2, faceDetected);
 
         EmojiDetector.feature_vals[2] = feat;
+
+        Log.d("Boss3", "mouth");
     }
 }
