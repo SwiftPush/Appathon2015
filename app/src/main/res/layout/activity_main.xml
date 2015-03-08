@@ -1,16 +1,31 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     tools:context=".MainActivity"
     android:orientation="vertical">
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="#FF6600"
+        android:layout_gravity="top">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text = "Seemoji"
+            android:textColor="#FFFFFF"
+            android:textSize="35dp"
+            android:gravity="center" />
+        </FrameLayout>
+
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="top">
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="200dp"
+            android:layout_height="fill_parent"
             android:layout_weight="1"
             android:id = "@+id/u1"
             android:src = "@drawable/alex"
@@ -18,7 +33,7 @@
             android:clickable="true" />
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="200dp"
+            android:layout_height="fill_parent"
             android:id = "@+id/u2"
             android:src = "@drawable/andy"
             android:layout_weight="1"
@@ -26,7 +41,7 @@
             android:clickable="true" />
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="200dp"
+            android:layout_height="fill_parent"
             android:id = "@+id/u3"
             android:layout_weight="1"
             android:src = "@drawable/sam"
@@ -35,16 +50,16 @@
         </LinearLayout>
     <TextView
         android:layout_width="fill_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         android:id = "@+id/yomoji"
-        android:text = "sdfds"
+        android:text = ""
         android:layout_gravity="center"
         android:gravity="center_vertical|center_horizontal"
         android:textSize="80dp" />
 
         <FrameLayout
             android:layout_width="fill_parent"
-            android:layout_height="200dp"
+            android:layout_height="fill_parent"
             android:layout_gravity="bottom"
             android:id="@+id/camera_container">
             </FrameLayout>
@@ -53,4 +68,4 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
         </FrameLayout>
-</FrameLayout>
+</LinearLayout>
